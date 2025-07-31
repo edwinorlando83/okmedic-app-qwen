@@ -1,0 +1,72 @@
+<!-- src/app/layouts/main-layout/main-layout.component.html -->
+<div class="app-container d-flex flex-column min-vh-100">
+  <!-- Navbar Común -->
+  <header class="navbar navbar-expand-lg navbar-light bg-white shadow-sm border-bottom fixed-top">
+    <div class="container-fluid">
+      <button class="btn btn-outline-primary me-2" (click)="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <div class="d-flex align-items-center">
+        <img
+          src="https://tudoctor.okmedic.online/files/tudoctorok.jpeg"
+          alt="Logo OK-MEDIC"
+          class="rounded me-3"
+          style="width: 40px; height: 40px; object-fit: cover;"
+        />
+        <span class="h5 mb-0 navbar-brand-custom">OK-MEDIC</span>
+      </div>
+
+      <div class="d-flex align-items-center ms-auto">
+        <button class="btn btn-outline-secondary btn-sm me-2" (click)="toggleDarkMode()">
+          <i [ngClass]="isDarkMode ? 'fas fa-sun' : 'fas fa-moon'"></i>
+        </button>
+        <span class="text-muted me-3 small">Hola, <strong>{{ getUser() }}</strong></span>
+        <button (click)="logout()" class="btn btn-outline-danger btn-sm">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="d-flex flex-grow-1" style="margin-top: 56px;"> <!-- Ajuste por navbar fixed -->
+    <!-- Sidebar -->
+    <div [ngClass]="{
+      'sidebar': true,
+      'sidebar-open': isSidebarOpen,
+      'sidebar-closed': !isSidebarOpen
+    }">
+      <div class="sidebar-content">
+        <nav class="nav flex-column">
+          <a
+            *ngFor="let item of menuItems"
+            class="nav-link"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+          >
+            <i [class]="item.icon + ' me-2'"></i>
+            <span *ngIf="isSidebarOpen">{{ item.name }}</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <main 
+      class="flex-grow-1 py-4"
+      [ngClass]="{
+        'content-expanded': isSidebarOpen,
+        'content-collapsed': !isSidebarOpen
+      }"
+    >
+      <div class="container-fluid">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+
+  <!-- Footer Común -->
+  <footer class="py-3 text-center text-muted small border-top bg-white">
+    <div class="container-fluid">
+      <p class="mb-0">© 2025 OK-MEDIC. Sistema de Gestión Médica.</p>
+    </div>
+  </footer>
+</div>

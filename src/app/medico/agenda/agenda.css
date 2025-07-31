@@ -1,0 +1,50 @@
+.nav-tabs .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: var(--dark-color);
+  border: 1px solid var(--border-color);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  padding: 12px 20px;
+  transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: var(--accent-color);
+  color: var(--acento-fuerte);
+}
+
+.nav-tabs .nav-link.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  font-weight: 600;
+}
+
+.nav-tabs .nav-link i {
+  font-size: 1.1rem;
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.border-start {
+  border-left: 5px solid currentColor !important;
+}
+
+.badge {
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 20px;
+}

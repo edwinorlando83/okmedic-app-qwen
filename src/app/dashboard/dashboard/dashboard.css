@@ -1,0 +1,57 @@
+/* src/app/dashboard/dashboard.component.css */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main.flex-grow-1 {
+  flex: 1;
+}
+
+.rounded-xl {
+  border-radius: 1rem;
+}
+
+.shadow-sm {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.border {
+  border: 1px solid #e5e7eb;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.bg-opacity-10 {
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.text-primary {
+  color: #007bff !important;
+}
+
+.text-info {
+  color: #17a2b8 !important;
+}
+
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Responsive en móviles */
+@media (max-width: 768px) {
+  .d-flex {
+    flex-direction: column;
+    align-items: center;
+  }
+  .me-3 {
+    margin-right: 0 !important;
+    margin-bottom: 0.5rem;
+  }
+}

@@ -1,0 +1,264 @@
+<div class="min-vh-100 bg-light">
+ 
+  <!-- Main Content -->
+  <main class="container-fluid py-4">
+    <!-- Selector de Fecha -->
+    <div class="mb-4 p-3 bg-white rounded shadow-sm">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <h5 class="mb-0">Seleccionar Fecha</h5>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <input
+            type="date"
+            class="form-control"
+            [value]="selectedDate"
+            (change)="onDateChange($event)"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Pestañas con iconos -->
+    <ul class="nav nav-tabs mb-4">
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          [ngClass]="{ 'active': activeTab === 'disponibles' }"
+          (click)="setActiveTab('disponibles')"
+          href="javascript:void(0)"
+        >
+          <i class="fas fa-calendar-plus"></i> Agendas Disponibles
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          [ngClass]="{ 'active': activeTab === 'programadas' }"
+          (click)="setActiveTab('programadas')"
+          href="javascript:void(0)"
+        >
+          <i class="fas fa-calendar-check"></i> Citas Programadas
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          [ngClass]="{ 'active': activeTab === 'curso' }"
+          (click)="setActiveTab('curso')"
+          href="javascript:void(0)"
+        >
+          <i class="fas fa-user-clock"></i> Citas en Curso
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          [ngClass]="{ 'active': activeTab === 'completadas' }"
+          (click)="setActiveTab('completadas')"
+          href="javascript:void(0)"
+        >
+          <i class="fas fa-clipboard-check"></i> Citas Completadas
+        </a>
+      </li>
+    </ul>
+
+    <!-- Contenido de las Pestañas -->
+    <div class="tab-content">
+      <!-- Agendas Disponibles -->
+      <div
+        class="tab-pane fade"
+        [ngClass]="{ 'show active': activeTab === 'disponibles' }"
+      >
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="card border-start border-primary border-4 h-100 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title">08:00 - 09:00</h5>
+                  <span class="badge badge-primary">Disponible</span>
+                </div>
+                <p class="card-text">
+                  <i class="fas fa-user-md me-2 text-primary"></i>Medicina General<br>
+                  <i class="fas fa-map-marker-alt me-2 text-primary"></i>Consultorio A<br>
+                </p>
+                <button class="btn btn-sm btn-primary w-100">Asignar Cita</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="card border-start border-info border-4 h-100 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title">10:00 - 11:00</h5>
+                  <span class="badge badge-info">Disponible</span>
+                </div>
+                <p class="card-text">
+                  <i class="fas fa-baby me-2 text-info"></i>Pediatría<br>
+                  <i class="fas fa-map-marker-alt me-2 text-info"></i>Consultorio B<br>
+                </p>
+                <button class="btn btn-sm btn-info w-100">Asignar Cita</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="card border-start border-success border-4 h-100 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title">14:00 - 15:00</h5>
+                  <span class="badge badge-success">Disponible</span>
+                </div>
+                <p class="card-text">
+                  <i class="fas fa-heartbeat me-2 text-success"></i>Cardiología<br>
+                  <i class="fas fa-map-marker-alt me-2 text-success"></i>Consultorio C<br>
+                </p>
+                <button class="btn btn-sm btn-success w-100">Asignar Cita</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Citas Programadas -->
+      <div
+        class="tab-pane fade"
+        [ngClass]="{ 'show active': activeTab === 'programadas' }"
+      >
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="card border-start border-warning border-4 h-100 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title">09:00</h5>
+                  <span class="badge badge-warning">Pendiente</span>
+                </div>
+                <p class="card-text">
+                  <i class="fas fa-user me-2 text-warning"></i><strong>Carlos Mendoza</strong><br>
+                  <i class="fas fa-stethoscope me-2 text-warning"></i>Consulta General<br>
+                  <i class="fas fa-phone me-2 text-warning"></i>0987654321<br>
+                </p>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-sm btn-primary">Iniciar Consulta</button>
+                  <button class="btn btn-sm btn-outline-secondary">Ver Historial</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="card border-start border-warning border-4 h-100 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title">10:30</h5>
+                  <span class="badge badge-warning">Pendiente</span>
+                </div>
+                <p class="card-text">
+                  <i class="fas fa-user me-2 text-warning"></i><strong>Ana Rodríguez</strong><br>
+                  <i class="fas fa-stethoscope me-2 text-warning"></i>Control de Diabetes<br>
+                  <i class="fas fa-phone me-2 text-warning"></i>0912345678<br>
+                </p>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-sm btn-primary">Iniciar Consulta</button>
+                  <button class="btn btn-sm btn-outline-secondary">Ver Historial</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="card border-start border-warning border-4 h-100 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title">11:15</h5>
+                  <span class="badge badge-warning">Pendiente</span>
+                </div>
+                <p class="card-text">
+                  <i class="fas fa-user me-2 text-warning"></i><strong>Luis Fernández</strong><br>
+                  <i class="fas fa-stethoscope me-2 text-warning"></i>Revisión Postoperatoria<br>
+                  <i class="fas fa-phone me-2 text-warning"></i>0987651234<br>
+                </p>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-sm btn-primary">Iniciar Consulta</button>
+                  <button class="btn btn-sm btn-outline-secondary">Ver Historial</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Citas en Curso -->
+      <div
+        class="tab-pane fade"
+        [ngClass]="{ 'show active': activeTab === 'curso' }"
+      >
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="card border-start border-info border-4 h-100 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title">08:30</h5>
+                  <span class="badge badge-info">En Curso</span>
+                </div>
+                <p class="card-text">
+                  <i class="fas fa-user me-2 text-info"></i><strong>Juan Pérez</strong><br>
+                  <i class="fas fa-stethoscope me-2 text-info"></i>Consulta General<br>
+                  <i class="fas fa-clock me-2 text-info"></i>Tiempo: 25 min<br>
+                </p>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-sm btn-success">Completar Consulta</button>
+                  <button class="btn btn-sm btn-outline-secondary">Agregar Notas</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Citas Completadas -->
+      <div
+        class="tab-pane fade"
+        [ngClass]="{ 'show active': activeTab === 'completadas' }"
+      >
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="card border-start border-success border-4 h-100 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title">08:00</h5>
+                  <span class="badge badge-success">Completada</span>
+                </div>
+                <p class="card-text">
+                  <i class="fas fa-user me-2 text-success"></i><strong>María González</strong><br>
+                  <i class="fas fa-stethoscope me-2 text-success"></i>Consulta General<br>
+                  <i class="fas fa-diagnoses me-2 text-success"></i><strong>Diagnóstico:</strong> Gripe<br>
+                </p>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-sm btn-outline-primary">Ver Ficha</button>
+                  <button class="btn btn-sm btn-outline-secondary">Imprimir Receta</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="card border-start border-success border-4 h-100 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title">09:30</h5>
+                  <span class="badge badge-success">Completada</span>
+                </div>
+                <p class="card-text">
+                  <i class="fas fa-user me-2 text-success"></i><strong>Pedro Martín</strong><br>
+                  <i class="fas fa-stethoscope me-2 text-success"></i>Control de Tensión<br>
+                  <i class="fas fa-diagnoses me-2 text-success"></i><strong>Diagnóstico:</strong> Hipertensión Controlada<br>
+                </p>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-sm btn-outline-primary">Ver Ficha</button>
+                  <button class="btn btn-sm btn-outline-secondary">Imprimir Receta</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
