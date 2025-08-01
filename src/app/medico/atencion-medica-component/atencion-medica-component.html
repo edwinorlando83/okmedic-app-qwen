@@ -1,0 +1,135 @@
+<!-- src/app/atencion-medica/atencion-medica.component.html -->
+<div class="container-fluid">
+  <!-- Encabezado -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-0">Atención Médica</h2>
+      <p class="text-muted">Gestiona tus consultas médicas</p>
+    </div>
+    <div>
+      <input type="date" class="form-control" [value]="selectedDate">
+    </div>
+  </div>
+
+  <!-- Listado de Consultas -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0">Consultas del Día</h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Paciente</th>
+                  <th>Hora</th>
+                  <th>Motivo</th>
+                  <th>Estado</th>
+                  <th>Prioridad</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let consulta of consultas">
+                  <td class="fw-medium">{{ consulta.id }}</td>
+                  <td>{{ consulta.paciente }}</td>
+                  <td>{{ consulta.hora }}</td>
+                  <td>{{ consulta.motivo }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="getEstadoClass(consulta.estado)">
+                      {{ consulta.estado | titlecase }}
+                    </span>
+                  </td>
+                  <td>
+                    <i [class]="getPrioridadIcon(consulta.prioridad)"></i>
+                    {{ consulta.prioridad | titlecase }}
+                  </td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <button 
+                        *ngIf="consulta.estado === 'pendiente'" 
+                        class="btn btn-sm btn-primary"
+                        (click)="iniciarConsulta(consulta)"
+                      >
+                        <i class="fas fa-play me-1"></i> Iniciar
+                      </button>
+                      <button 
+                        *ngIf="consulta.estado === 'en_curso'" 
+                        class="btn btn-sm btn-success"
+                        (click)="completarConsulta(consulta)"
+                      >
+                        <i class="fas fa-check me-1"></i> Completar
+                      </button>
+                      <button class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="row mt-4">
+    <div class="col-md-3">
+      <div class="card border-start border-primary border-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h6 class="text-muted">Pendientes</h6>
+              <h3 class="mb-0">8</h3>
+            </div>
+            <i class="fas fa-clock text-primary fa-2x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-start border-info border-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h6 class="text-muted">En Curso</h6>
+              <h3 class="mb-0">2</h3>
+            </div>
+            <i class="fas fa-user-md text-info fa-2x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-start border-success border-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h6 class="text-muted">Completadas</h6>
+              <h3 class="mb-0">5</h3>
+            </div>
+            <i class="fas fa-check-circle text-success fa-2x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-start border-danger border-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h6 class="text-muted">Urgentes</h6>
+              <h3 class="mb-0">3</h3>
+            </div>
+            <i class="fas fa-exclamation-triangle text-danger fa-2x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

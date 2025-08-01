@@ -1,0 +1,171 @@
+<!-- src/app/components/paciente-selector/paciente-selector.component.html -->
+<div class="modal-header bg-gradient-primary text-white">
+  <h4 class="modal-title">
+    <i class="fas fa-user-injured me-2"></i>Seleccionar Paciente
+  </h4>
+  <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="cancelar()"></button>
+</div>
+
+<div class="modal-body">
+  <!-- Barra de búsqueda mejorada -->
+  <div class="mb-4">
+    <div class="input-group input-group-lg">
+      <span class="input-group-text bg-primary text-white">
+        <i class="fas fa-search"></i>
+      </span>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Buscar por nombre o identificación..."
+        [(ngModel)]="terminoBusqueda"
+        (input)="onSearchInput()"
+        (keydown.enter)="cargarPacientes()"
+        autofocus
+      >
+      <button 
+        class="btn btn-outline-secondary" 
+        type="button" 
+        (click)="terminoBusqueda=''; onSearchInput()"
+        [disabled]="!terminoBusqueda"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="form-text text-muted">
+      <small>
+        <i class="fas fa-info-circle me-1"></i>
+        La búsqueda se realiza automáticamente mientras escribes
+      </small>
+    </div>
+  </div>
+
+  <!-- Mensaje de carga con estilo mejorado -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border spinner-border-lg text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3 h5 text-primary">
+      <i class="fas fa-spinner fa-spin me-2"></i>Buscando pacientes...
+    </p>
+  </div>
+
+  <!-- Mensaje de error mejorado -->
+  <div *ngIf="error && !cargando" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="d-flex">
+      <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+      <div>
+        <h5 class="alert-heading">¡Ups! Algo salió mal</h5>
+        <p class="mb-0">{{ error }}</p>
+      </div>
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <!-- Lista de pacientes -->
+  <div *ngIf="!cargando && !error">
+ <div 
+  *ngFor="let paciente of pacientesConEdad" 
+  class="paciente-item card border-start border-3 border-primary"
+>
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start">
+      <div class="flex-grow-1">
+        <h6 class="card-title text-primary mb-2">
+          <i class="fas fa-user me-1"></i>{{ paciente.pac_nombrecompleto }}
+        </h6>
+        <div class="row g-2">
+          <div class="col-md-6">
+            <p class="card-text mb-1">
+              <i class="fas fa-id-card text-success me-1"></i>
+              <small><strong>CI:</strong> {{ paciente.pac_identificacion }}</small>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p class="card-text mb-1">
+              <i class="fas fa-birthday-cake text-warning me-1"></i>
+              <small><strong>Nac:</strong> {{ paciente.pac_fechanac | date:'dd/MM/yyyy' }}</small>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p class="card-text mb-0">
+              <i class="fas fa-calculator text-info me-1"></i>
+              <small>
+                <strong>Edad:</strong>
+                <span class="badge bg-info" *ngIf="paciente.edad !== null">
+                  {{ paciente.edad }} años
+                </span>
+                <span class="badge bg-secondary" *ngIf="paciente.edad === null">
+                  N/A
+                </span>
+              </small>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-end ms-2">
+        <button 
+          class="btn btn-primary btn-sm mb-1" 
+          type="button"
+          (click)="seleccionarPaciente(paciente)"
+        >
+          <i class="fas fa-check"></i>
+        </button>
+        <small class="text-muted">
+          <i class="fas fa-hashtag"></i> {{ paciente.name.substring(0, 8) }}...
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Paginación -->
+    <div *ngIf="pacientesConEdad.length > 0 && totalPaginas > 1" class="mt-4">
+      <nav aria-label="Navegación de página">
+        <ul class="pagination justify-content-center mb-0">
+          <li class="page-item" [class.disabled]="paginaActual === 1">
+            <a class="page-link" href="javascript:void(0)" (click)="cambiarPagina(paginaActual - 1)">
+              <i class="fas fa-chevron-left"></i>
+            </a>
+          </li>
+          
+          <li 
+            *ngFor="let pageNum of getPageNumbers()" 
+            class="page-item"
+            [class.active]="pageNum === paginaActual"
+            [class.disabled]="pageNum === -1"
+          >
+            <a 
+              *ngIf="pageNum !== -1; else dots" 
+              class="page-link" 
+              href="javascript:void(0)" 
+              (click)="cambiarPagina(pageNum)"
+            >
+              {{ pageNum }}
+            </a>
+            <ng-template #dots>
+              <span class="page-link">...</span>
+            </ng-template>
+          </li>
+          
+          <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
+            <a class="page-link" href="javascript:void(0)" (click)="cambiarPagina(paginaActual + 1)">
+              <i class="fas fa-chevron-right"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="text-center text-muted small mt-2">
+        <i class="fas fa-file-alt me-1"></i>
+        Página {{ paginaActual }} de {{ totalPaginas }} 
+        <span class="mx-2">•</span>
+        {{ pacientesConEdad.length }} pacientes mostrados
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer bg-light">
+  <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">
+    <i class="fas fa-times me-1"></i>Cancelar
+  </button>
+</div>

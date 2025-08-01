@@ -1,0 +1,240 @@
+<!-- src/app/configuracion/configuracion.component.html -->
+<div class="container-fluid">
+  <!-- Encabezado -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-0">Configuración</h2>
+      <p class="text-muted">Personaliza tu experiencia en OK-MEDIC</p>
+    </div>
+    <button class="btn btn-primary" (click)="guardarCambios()">
+      <i class="fas fa-save me-1"></i> Guardar Cambios
+    </button>
+  </div>
+
+  <div class="row">
+    <!-- Menú de Configuración -->
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0">Configuración</h5>
+        </div>
+        <div class="list-group list-group-flush">
+          <button class="list-group-item list-group-item-action active">
+            <i class="fas fa-user me-2"></i> Perfil
+          </button>
+          <button class="list-group-item list-group-item-action">
+            <i class="fas fa-bell me-2"></i> Notificaciones
+          </button>
+          <button class="list-group-item list-group-item-action">
+            <i class="fas fa-sliders-h me-2"></i> Preferencias
+          </button>
+          <button class="list-group-item list-group-item-action">
+            <i class="fas fa-shield-alt me-2"></i> Seguridad
+          </button>
+          <button class="list-group-item list-group-item-action">
+            <i class="fas fa-sync-alt me-2"></i> Sincronización
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="col-md-9">
+      <!-- Sección de Perfil -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0">Perfil</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4 text-center mb-4">
+              <img 
+                [src]="configuracion.perfil.foto" 
+                alt="Foto de perfil" 
+                class="rounded-circle mb-3"
+                style="width: 120px; height: 120px; object-fit: cover;"
+                onerror="this.src='https://tudoctor.okmedic.online/files/tudoctorok.jpeg'"
+              >
+              <button class="btn btn-outline-primary btn-sm" (click)="cambiarFoto()">
+                <i class="fas fa-camera me-1"></i> Cambiar Foto
+              </button>
+            </div>
+            <div class="col-md-8">
+              <div class="mb-3">
+                <label class="form-label">Nombre Completo</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [(ngModel)]="configuracion.perfil.nombre"
+                >
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  [(ngModel)]="configuracion.perfil.email"
+                >
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Teléfono</label>
+                <input 
+                  type="tel" 
+                  class="form-control" 
+                  [(ngModel)]="configuracion.perfil.telefono"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de Notificaciones -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0">Notificaciones</h5>
+        </div>
+        <div class="card-body">
+          <div class="form-check mb-3">
+            <input 
+              class="form-check-input" 
+              type="checkbox" 
+              id="notiEmail" 
+              [(ngModel)]="configuracion.notificaciones.email"
+            >
+            <label class="form-check-label" for="notiEmail">
+              <strong>Email</strong>
+              <p class="text-muted mb-0">Recibe notificaciones por correo electrónico</p>
+            </label>
+          </div>
+          <div class="form-check mb-3">
+            <input 
+              class="form-check-input" 
+              type="checkbox" 
+              id="notiSMS" 
+              [(ngModel)]="configuracion.notificaciones.sms"
+            >
+            <label class="form-check-label" for="notiSMS">
+              <strong>SMS</strong>
+              <p class="text-muted mb-0">Recibe notificaciones por mensaje de texto</p>
+            </label>
+          </div>
+          <div class="form-check">
+            <input 
+              class="form-check-input" 
+              type="checkbox" 
+              id="notiPush" 
+              [(ngModel)]="configuracion.notificaciones.push"
+            >
+            <label class="form-check-label" for="notiPush">
+              <strong>Notificaciones Push</strong>
+              <p class="text-muted mb-0">Recibe notificaciones en tu dispositivo</p>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de Preferencias -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0">Preferencias</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Tema</label>
+              <select 
+                class="form-select" 
+                [(ngModel)]="configuracion.preferencias.tema"
+              >
+                <option *ngFor="let tema of temas" [value]="tema.valor">
+                  {{ tema.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Idioma</label>
+              <select 
+                class="form-select" 
+                [(ngModel)]="configuracion.preferencias.idioma"
+              >
+                <option *ngFor="let idioma of idiomas" [value]="idioma.valor">
+                  {{ idioma.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Zona Horaria</label>
+              <select 
+                class="form-select" 
+                [(ngModel)]="configuracion.preferencias.zonaHoraria"
+              >
+                <option *ngFor="let zona of zonasHorarias" [value]="zona.valor">
+                  {{ zona.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de Seguridad -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0">Seguridad</h5>
+        </div>
+        <div class="card-body">
+          <!-- Formulario de cambio de contraseña -->
+          <div *ngIf="configuracion.seguridad.cambiarContrasena" class="mb-4 p-3 bg-light rounded">
+            <h6 class="mb-3">Cambiar Contraseña</h6>
+            <div class="mb-3">
+              <label class="form-label">Contraseña Actual</label>
+              <input type="password" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Nueva Contraseña</label>
+              <input type="password" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Confirmar Nueva Contraseña</label>
+              <input type="password" class="form-control">
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-primary btn-sm" (click)="guardarNuevaContrasena()">
+                Guardar Contraseña
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" (click)="cancelarCambioContrasena()">
+                Cancelar
+              </button>
+            </div>
+          </div>
+
+          <!-- Opciones de seguridad -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <strong>Cambiar Contraseña</strong>
+              <p class="text-muted mb-0">Actualiza tu contraseña de acceso</p>
+            </div>
+            <button class="btn btn-outline-primary btn-sm" (click)="cambiarContrasena()">
+              Cambiar
+            </button>
+          </div>
+          
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>Autenticación de Dos Factores</strong>
+              <p class="text-muted mb-0">Añade una capa adicional de seguridad</p>
+            </div>
+            <div class="form-check form-switch">
+              <input 
+                class="form-check-input" 
+                type="checkbox" 
+                [(ngModel)]="configuracion.seguridad.autenticacion2fa"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,262 @@
+/* src/app/auth/login.component.css */
+
+ 
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #0077b6 0%, #00b4d8 50%, #90e0ef 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto de burbujas de fondo */
+.login-wrapper::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation: moveBubble 20s linear infinite;
+  z-index: 0;
+}
+
+@keyframes moveBubble {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+.login-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1;
+  position: relative;
+}
+
+.login-box {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.login-logo {
+ 
+  height: 90px;
+  object-fit: cover;
+ 
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border: 3px solid white;
+}
+
+.login-title {
+  color: #0077b6;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0.5rem 0 0.25rem;
+  letter-spacing: -0.5px;
+}
+
+.login-subtitle {
+  color: #6c757d;
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 400;
+}
+
+.login-form {
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.9rem 1.25rem;
+  font-size: 1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  border-color: #0077b6;
+  box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.15);
+  outline: none;
+}
+
+.form-control:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
+
+.alert {
+  border-radius: 12px;
+  padding: 0.85rem 1.25rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #0077b6 0%, #005577 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 119, 182, 0.3);
+}
+
+.btn-login:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 119, 182, 0.4);
+}
+
+.btn-login:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.login-link {
+  display: block;
+  color: #0077b6;
+  text-decoration: none;
+  font-size: 0.95rem;
+  margin: 0.5rem 0;
+  transition: color 0.2s ease;
+}
+
+.login-link:hover {
+  color: #005577;
+  text-decoration: underline;
+}
+
+.login-footer-global {
+  text-align: center;
+  padding: 1.5rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  z-index: 1;
+  position: relative;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .login-box {
+    padding: 1.75rem;
+    margin: 0.5rem;
+  }
+  
+  .login-logo {
+    width: 75px;
+    height: 75px;
+  }
+  
+  .login-title {
+    font-size: 1.75rem;
+  }
+  
+  .form-control {
+    padding: 0.8rem 1rem;
+  }
+  
+  .btn-login {
+    padding: 0.9rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .login-box {
+    padding: 1.5rem;
+  }
+  
+  .login-title {
+    font-size: 1.5rem;
+  }
+}
+
+
+/* Clases reutilizables para inputs compactos */
+.form-control-sm, .form-select-sm {
+  padding: 0.65rem 1rem; /* Reducido de 0.9rem/0.8rem */
+  font-size: 0.95rem; /* Ligeramente más pequeño */
+  border-radius: 10px; /* Un poco menos redondeado */
+}
+
+.form-label-sm {
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.btn-sm {
+  padding: 0.75rem 1.25rem; /* Botón más compacto */
+  font-size: 1rem;
+  border-radius: 10px;
+}
+
+/* Aplicar estilos compactos al login */
+.login-form .form-control,
+.login-form .form-select {
+  padding: 0.65rem 1rem;
+  font-size: 0.95rem;
+  border-radius: 10px;
+}
+
+.login-form .form-label {
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.btn-login {
+  padding: 0.75rem;
+  font-size: 1rem; /* Reducido de 1.1rem */
+  border-radius: 10px;
+  /* ... (resto de estilos existentes para btn-login) ... */
+}

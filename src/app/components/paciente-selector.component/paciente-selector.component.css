@@ -1,0 +1,238 @@
+/* src/app/components/paciente-selector/paciente-selector.component.css */
+.modal-header {
+  background: linear-gradient(135deg, #0077b6 0%, #005577 100%) !important;
+  border-bottom: none;
+  padding: 1rem 1.25rem; /* Reducido */
+  border-top-left-radius: 8px; /* Reducido de calc(0.5rem - 1px) */
+  border-top-right-radius: 8px;
+}
+
+.modal-title {
+  font-weight: 600;
+  color: white;
+  font-size: 1.25rem; /* Ligeramente más pequeño */
+}
+
+.modal-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef; /* Más suave */
+  padding: 0.75rem 1.25rem; /* Reducido */
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.modal-body {
+  padding: 1.25rem; /* Reducido de 1.5rem */
+}
+
+.input-group-text {
+  background-color: #0077b6;
+  border-color: #0077b6;
+  color: white;
+  border-width: 1px; /* Bordes más finos */
+}
+
+.form-control {
+  border-color: #ced4da;
+  padding: 0.65rem 0.9rem; /* Reducido */
+  font-size: 0.95rem; /* Ligeramente más pequeño */
+  border-width: 1px; /* Bordes más finos */
+  border-radius: 6px; /* Bordes ligeramente más redondeados */
+}
+
+.form-control:focus {
+  border-color: #0077b6;
+  box-shadow: 0 0 0 0.2rem rgba(0, 119, 182, 0.25); /* Sombra más suave */
+}
+
+.pacientes-list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.25rem; /* Reducido */
+}
+
+/* Tarjeta de paciente más compacta */
+.paciente-item {
+  cursor: pointer;
+  transition: all 0.2s ease; /* Transición más rápida */
+  border: 1px solid #e9ecef; /* Borde más fino */
+  border-left-width: 3px; /* Reducido de 4px */
+  border-radius: 8px; /* Bordes más redondeados */
+  margin-bottom: 0.75rem; /* Reducido de 3px */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra más suave */
+}
+
+.paciente-item:hover {
+  transform: translateY(-2px); /* Reducido de -3px */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important; /* Sombra más suave */
+  border-color: #0077b6;
+}
+
+.card-body {
+  padding: 1rem; /* Reducido de py-3 */
+}
+
+.card-title {
+  color: #0077b6;
+  font-weight: 600;
+  font-size: 1.1rem; /* Ligeramente más pequeño */
+  margin-bottom: 0.75rem; /* Reducido */
+}
+
+/* Información del paciente más compacta */
+.card-text {
+  font-size: 0.9rem; /* Ligeramente más pequeño */
+  margin-bottom: 0.25rem; /* Reducido */
+}
+
+.row.g-2 {
+  --bs-gutter-x: 0.5rem; /* Espaciado más compacto */
+  --bs-gutter-y: 0.5rem;
+}
+
+/* Botón más compacto */
+.btn-primary {
+  background-color: #0077b6;
+  border-color: #0077b6;
+  padding: 0.4rem 0.8rem; /* Reducido */
+  font-weight: 500;
+  font-size: 0.9rem; /* Ligeramente más pequeño */
+  border-radius: 6px; /* Bordes más redondeados */
+  border-width: 1px; /* Borde más fino */
+}
+
+.btn-primary:hover {
+  background-color: #005577;
+  border-color: #005577;
+  transform: translateY(-1px); /* Reducido */
+}
+
+.btn-sm {
+  padding: 0.35rem 0.7rem; /* Reducido */
+  font-size: 0.85rem; /* Ligeramente más pequeño */
+  border-radius: 6px; /* Bordes más redondeados */
+}
+
+/* Badges más compactos */
+.badge {
+  font-weight: 600;
+  padding: 0.4em 0.6em; /* Reducido */
+  font-size: 0.8rem; /* Ligeramente más pequeño */
+  border-radius: 4px; /* Bordes más redondeados */
+}
+
+.badge.bg-info {
+  background-color: #00b4d8 !important;
+}
+
+.badge.bg-secondary {
+  background-color: #6c757d !important;
+}
+
+/* Alertas más suaves */
+.alert {
+  border-radius: 8px; /* Bordes más redondeados */
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra más suave */
+  padding: 1rem; /* Ajustado */
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.alert-danger .alert-heading {
+  color: #dc3545;
+}
+
+/* Paginación más compacta */
+.page-link {
+  color: #0077b6;
+  border-radius: 6px !important; /* Bordes más redondeados */
+  margin: 0 1px; /* Reducido */
+  border: 1px solid #dee2e6;
+  padding: 0.375rem 0.75rem; /* Reducido */
+  font-size: 0.9rem; /* Ligeramente más pequeño */
+}
+
+.page-link:hover {
+  color: #005577;
+  background-color: #e9ecef;
+}
+
+.page-item.active .page-link {
+  background-color: #0077b6;
+  border-color: #0077b6;
+}
+
+.page-item.disabled .page-link {
+  color: #6c757d;
+  background-color: #fff;
+  border-color: #dee2e6;
+}
+
+.pagination {
+  --bs-pagination-padding-x: 0.75rem;
+  --bs-pagination-padding-y: 0.375rem;
+  --bs-pagination-font-size: 0.9rem;
+  --bs-pagination-border-radius: 6px;
+}
+
+/* Scrollbar más fino */
+.pacientes-list::-webkit-scrollbar {
+  width: 6px; /* Reducido de 8px */
+}
+
+.pacientes-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px; /* Reducido */
+}
+
+.pacientes-list::-webkit-scrollbar-thumb {
+  background: #0077b6;
+  border-radius: 3px; /* Reducido */
+}
+
+.pacientes-list::-webkit-scrollbar-thumb:hover {
+  background: #005577;
+}
+
+/* Responsive mejorado */
+@media (max-width: 576px) {
+  .modal-body {
+    padding: 1rem;
+  }
+  
+  .modal-header, .modal-footer {
+    padding: 0.75rem 1rem;
+  }
+  
+  .card-body {
+    padding: 0.75rem;
+  }
+  
+  .card-title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-text {
+    font-size: 0.85rem;
+  }
+  
+  .btn-primary, .btn-sm {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+  
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.3em 0.5em;
+  }
+  
+  .page-link {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+  }
+} 

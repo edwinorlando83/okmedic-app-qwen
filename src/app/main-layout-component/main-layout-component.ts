@@ -1,17 +1,17 @@
 // src/app/layouts/main-layout/main-layout.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
  
 import { NgClass, NgFor, NgIf } from '@angular/common';
-import { AuthService } from '../services/auth.service';
+import { AuthService, ProfesionalSalud } from '../services/auth.service';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-imports: [
+  imports: [
     RouterOutlet, 
-    RouterLink,       // ✅ Añade RouterLink aquí
-    RouterLinkActive, // ✅ Añade RouterLinkActive aquí
+    RouterLink,
+    RouterLinkActive,
     NgClass, 
     NgFor, 
     NgIf
@@ -22,24 +22,57 @@ imports: [
 export class MainLayoutComponent implements OnInit {
   isSidebarOpen = true;
   isDarkMode = false;
-
-  menuItems = [
-    { name: 'Dashboard', icon: 'fas fa-tachometer-alt', route: '/dashboard' },
-    { name: 'Agenda', icon: 'fas fa-calendar-alt', route: '/agenda' },
-    { name: 'Pacientes', icon: 'fas fa-users', route: '/pacientes' },
-    { name: 'Consultas', icon: 'fas fa-stethoscope', route: '/consultas' },
-    { name: 'Configuración', icon: 'fas fa-cog', route: '/configuracion' }
-  ];
+  profesional: ProfesionalSalud | null = null;
+  menuItems: any[] = []; // ✅ Menú dinámico
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    public router: Router
   ) {}
 
   ngOnInit(): void {
-    // Cargar preferencia de tema del localStorage
     this.isDarkMode = localStorage.getItem('theme') === 'dark';
     this.updateTheme();
+    this.profesional = this.authService.getProfesionalSalud();
+    this.initializeMenu(); // ✅ Inicializamos el menú según el rol
+  }
+
+  // ✅ Método para inicializar el menú según el rol
+  private initializeMenu(): void {
+    if (this.profesional) {
+      const rol = this.profesional.rol?.toUpperCase();
+      
+      switch (rol) {
+        case 'DOCTOR':
+          this.menuItems = [
+            { name: 'Dashboard', icon: 'fas fa-tachometer-alt', route: '/dashboard' },
+            { name: 'Agenda', icon: 'fas fa-calendar-alt', route: '/agenda' },
+            { name: 'Atención Médica', icon: 'fas fa-stethoscope', route: '/atencion-medica' },
+            { name: 'Pacientes', icon: 'fas fa-users', route: '/pacientes' },
+            { name: 'Configuración', icon: 'fas fa-cog', route: '/configuracion' }
+          ];
+          break;
+          
+        case 'ENFERMERA':
+          this.menuItems = [
+            { name: 'Dashboard', icon: 'fas fa-tachometer-alt', route: '/dashboard' },
+            { name: 'Agenda', icon: 'fas fa-calendar-alt', route: '/agenda' },
+            { name: 'Signos Vitales', icon: 'fas fa-heartbeat', route: '/signos-vitales' },
+            { name: 'Admisión', icon: 'fas fa-user-plus', route: '/admision' },
+            { name: 'Pacientes', icon: 'fas fa-users', route: '/pacientes' },
+            { name: 'Configuración', icon: 'fas fa-cog', route: '/configuracion' }
+          ];
+          break;
+          
+        default:
+          // Menú por defecto si no se reconoce el rol
+          this.menuItems = [
+            { name: 'Dashboard', icon: 'fas fa-tachometer-alt', route: '/dashboard' },
+            { name: 'Agenda', icon: 'fas fa-calendar-alt', route: '/agenda' },
+            { name: 'Configuración', icon: 'fas fa-cog', route: '/configuracion' }
+          ];
+      }
+    }
   }
 
   toggleSidebar(): void {
@@ -54,11 +87,9 @@ export class MainLayoutComponent implements OnInit {
 
   private updateTheme(): void {
     if (this.isDarkMode) {
-      document.body.classList.add('dark-mode');
-      document.body.classList.remove('light-mode');
+      document.documentElement.setAttribute('data-theme', 'dark');
     } else {
-      document.body.classList.add('light-mode');
-      document.body.classList.remove('dark-mode');
+      document.documentElement.setAttribute('data-theme', 'light');
     }
   }
 
@@ -68,6 +99,18 @@ export class MainLayoutComponent implements OnInit {
   }
 
   getUser(): string {
-    return localStorage.getItem('user') || 'Dr.';
+    if (this.profesional && this.profesional.nombre) {
+      return this.profesional.nombre.split(' ')[0] || 'Profesional';
+    }
+    return localStorage.getItem('user') || 'Profesional';
+  }
+
+  getFotoProfesional(): string {
+    return this.profesional?.foto || 'https://tudoctor.okmedic.online/files/tudoctorok.jpeg';
+  }
+
+  // ✅ Método para obtener el rol
+  getRol(): string {
+    return this.profesional?.rol || 'N/A';
   }
 }

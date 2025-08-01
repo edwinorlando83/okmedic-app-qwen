@@ -1,73 +1,106 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-teal-50 to-cyan-100 flex items-center justify-center px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl">
-    <div class="text-center">
-      <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Bienvenido a</h2>
-      <div class="mt-2 text-4xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
-        OK-MEDIC
+<!-- src/app/auth/login.component.html -->
+<div class="login-wrapper">
+  <div class="login-container">
+    <div class="login-box">
+      <!-- Header con logo y título -->
+      <div class="login-header">
+        <div class="logo-container">
+          <img
+            src="https://tudoctor.okmedic.online/files/tudoctorok.jpeg"
+            alt="Logo OK-MEDIC"
+            class="login-logo"
+          >
+        </div>
+        <h1 class="login-title">OK-MEDIC</h1>
+        <p class="login-subtitle">Sistema de Gestión Médica</p>
       </div>
-      <p class="mt-2 text-sm text-gray-600">Sistema de Gestión Médica</p>
-    </div>
 
-    <form (ngSubmit)="onLogin()" #form="ngForm" class="mt-8 space-y-6">
-      <div class="rounded-md -space-y-px">
-        <div>
+      <!-- Formulario -->
+      <form (ngSubmit)="onLogin()" #form="ngForm" class="login-form">
+        <!-- Selector de Unidad Médica -->
+        <div class="form-group">
+          <label for="unidad_medica" class="form-label form-label-sm">
+      <i class="fas fa-hospital me-2"></i>Unidad Médica
+    </label>
+          <select
+            id="unidad_medica"
+            name="unidad_medica"
+           class="form-select form-select-sm"
+            [(ngModel)]="credentials.unidad_medica"
+            required
+            [disabled]="cargandoUnidades"
+          >
+            <option value="" disabled [selected]="!credentials.unidad_medica">
+              {{ cargandoUnidades ? 'Cargando...' : 'Seleccione una unidad' }}
+            </option>
+            <option *ngFor="let unidad of unidadesMedicas" [value]="unidad.name">
+              {{ unidad.unimed_nombre }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Campo de Email -->
+        <div class="form-group">
+          <label for="email" class="form-label form-label-sm">
+      <i class="fas fa-envelope me-2"></i>Usuario
+    </label>
           <input
             type="email"
+            id="email"
             name="email"
-            placeholder="Correo institucional"
+             class="form-control form-control-sm"
+            placeholder="usuario"
             [(ngModel)]="credentials.usr"
             required
-            #usr="ngModel"
-            class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 focus:z-10 text-sm"
-          />
+          >
         </div>
-        <div>
+
+        <!-- Campo de Contraseña -->
+        <div class="form-group">
+   <label for="password" class="form-label form-label-sm">
+      <i class="fas fa-lock me-2"></i>Contraseña
+    </label>
           <input
             type="password"
+            id="password"
             name="password"
-            placeholder="Contraseña"
+           class="form-control form-control-sm" 
+            placeholder="Ingrese su contraseña"
             [(ngModel)]="credentials.pwd"
             required
-            #pwd="ngModel"
-            class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 focus:z-10 text-sm"
-          />
+          >
         </div>
-      </div>
 
-      <div *ngIf="error" class="text-red-500 text-sm text-center bg-red-50 p-3 rounded-md">
-        {{ error }}
-      </div>
+        <!-- Mensaje de error -->
+        <div *ngIf="error" class="alert alert-danger" role="alert">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          {{ error }}
+        </div>
 
-      <div>
+        <!-- Botón de submit -->
         <button
           type="submit"
-          [disabled]="loading"
-          class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-70 disabled:cursor-not-allowed transform transition hover:scale-105"
+          [disabled]="loading || cargandoUnidades || !credentials.unidad_medica"
+         class="btn btn-login btn-sm"
         >
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          <i *ngIf="!loading" class="fas fa-sign-in-alt me-2"></i>
           {{ loading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
         </button>
-      </div>
+      </form>
 
-      <div class="text-center space-y-2 text-sm">
-        <div>
-          <a
-            href="https://tudoctor.okmedic.online/forgot"
-            target="_blank"
-            class="font-medium text-red-600 hover:text-red-500"
-          >
-            ¿Olvidó su contraseña?
-          </a>
-        </div>
-        <div>
-          <a
-            href="https://tudoctor.okmedic.online/login_with_email"
-            target="_blank"
-            class="font-medium text-blue-600 hover:text-blue-500"
-          >
-            Iniciar sesión con enlace de correo
-          </a>
-        </div>
+      <!-- Enlaces adicionales -->
+      <div class="login-footer">
+        <a href="https://tudoctor.okmedic.online/forgot" target="_blank" class="login-link">
+          <i class="fas fa-key me-1"></i> ¿Olvidó su contraseña?
+        </a>
+   
       </div>
-    </form>
+    </div>
+  </div>
+
+  <!-- Footer global -->
+  <div class="login-footer-global">
+    <p class="mb-0">© 2025 OK-MEDIC. Sistema de Gestión Médica.</p>
   </div>
 </div>

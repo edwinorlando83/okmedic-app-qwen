@@ -1,0 +1,125 @@
+<!-- src/app/signos-vitales/signos-vitales.component.html -->
+<div class="container-fluid">
+  <!-- Encabezado -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-0">Signos Vitales</h2>
+      <p class="text-muted">Registro y monitoreo de signos vitales</p>
+    </div>
+    <div class="d-flex gap-2">
+      <input type="date" class="form-control" [value]="selectedDate">
+      <button class="btn btn-primary" (click)="registrarSignos()">
+        <i class="fas fa-plus me-1"></i> Registrar Signos
+      </button>
+    </div>
+  </div>
+
+  <!-- Listado de Registros -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0">Registros Recientes</h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Paciente</th>
+                  <th>Fecha</th>
+                  <th>Hora</th>
+                  <th>Temp (°C)</th>
+                  <th>Presión (mmHg)</th>
+                  <th>Pulso (bpm)</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let registro of registros">
+                  <td class="fw-medium">{{ registro.id }}</td>
+                  <td>{{ registro.paciente }}</td>
+                  <td>{{ registro.fecha }}</td>
+                  <td>{{ registro.hora }}</td>
+                  <td>{{ registro.temperatura }}</td>
+                  <td>{{ registro.presion }}</td>
+                  <td>{{ registro.pulso }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="getEstadoClass(registro.estado)">
+                      {{ registro.estado | titlecase }}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary" (click)="verDetalles(registro)">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tarjetas de Parámetros -->
+  <div class="row mt-4">
+    <div class="col-md-2">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <i class="fas fa-thermometer-half fa-2x text-primary mb-2"></i>
+          <h6 class="text-muted">Temperatura</h6>
+          <p class="mb-0">36.5 - 37.5 °C</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <i class="fas fa-heartbeat fa-2x text-danger mb-2"></i>
+          <h6 class="text-muted">Presión</h6>
+          <p class="mb-0">120/80 mmHg</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <i class="fas fa-heart fa-2x text-info mb-2"></i>
+          <h6 class="text-muted">Pulso</h6>
+          <p class="mb-0">60-100 bpm</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <i class="fas fa-lungs fa-2x text-success mb-2"></i>
+          <h6 class="text-muted">Respiración</h6>
+          <p class="mb-0">12-20 rpm</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <i class="fas fa-wind fa-2x text-warning mb-2"></i>
+          <h6 class="text-muted">Saturación</h6>
+          <p class="mb-0">>95%</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card text-center border-0 shadow-sm">
+        <div class="card-body">
+          <i class="fas fa-weight fa-2x text-secondary mb-2"></i>
+          <h6 class="text-muted">IMC</h6>
+          <p class="mb-0">18.5-24.9</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

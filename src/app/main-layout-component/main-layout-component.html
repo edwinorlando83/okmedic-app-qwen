@@ -1,6 +1,6 @@
 <!-- src/app/layouts/main-layout/main-layout.component.html -->
 <div class="app-container d-flex flex-column min-vh-100">
-  <!-- Navbar Común -->
+  <!-- Navbar Común (Fijo en la parte superior) -->
   <header class="navbar navbar-expand-lg navbar-light bg-white shadow-sm border-bottom fixed-top">
     <div class="container-fluid">
       <button class="btn btn-outline-primary me-2" (click)="toggleSidebar()">
@@ -9,10 +9,11 @@
       
       <div class="d-flex align-items-center">
         <img
-          src="https://tudoctor.okmedic.online/files/tudoctorok.jpeg"
-          alt="Logo OK-MEDIC"
+          [src]="getFotoProfesional()"
+          alt="Foto Profesional"
           class="rounded me-3"
           style="width: 40px; height: 40px; object-fit: cover;"
+          onerror="this.src='https://tudoctor.okmedic.online/files/tudoctorok.jpeg'"
         />
         <span class="h5 mb-0 navbar-brand-custom">OK-MEDIC</span>
       </div>
@@ -27,8 +28,9 @@
     </div>
   </header>
 
-  <div class="d-flex flex-grow-1" style="margin-top: 56px;"> <!-- Ajuste por navbar fixed -->
-    <!-- Sidebar -->
+  <!-- Contenedor principal debajo del navbar fijo -->
+  <div class="d-flex flex-grow-1" style="margin-top: 56px;">
+    <!-- Sidebar (Altura completa menos el navbar) -->
     <div [ngClass]="{
       'sidebar': true,
       'sidebar-open': isSidebarOpen,
@@ -63,8 +65,8 @@
     </main>
   </div>
 
-  <!-- Footer Común -->
-  <footer class="py-3 text-center text-muted small border-top bg-white">
+  <!-- Footer Común (Pegado al final) -->
+  <footer class="py-3 text-center text-muted small border-top bg-white mt-auto">
     <div class="container-fluid">
       <p class="mb-0">© 2025 OK-MEDIC. Sistema de Gestión Médica.</p>
     </div>

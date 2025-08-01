@@ -1,18 +1,28 @@
 /* src/app/layouts/main-layout/main-layout.component.css */
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Segoe UI', sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+  padding-top: 56px; /* Compensar navbar fixed */
+}
+
+
 .app-container {
   min-height: 100vh;
 }
 
-/* Sidebar Styles */
+/* Sidebar Styles - Ajustado para estar debajo del navbar fijo */
 .sidebar {
-  height: calc(100vh - 56px);
+  height: calc(100vh - 56px); /* Altura completa menos el navbar */
   position: fixed;
-  top: 56px;
+  top: 56px; /* Debajo del navbar */
   left: 0;
   background: var(--light-color);
   border-right: 1px solid var(--border-color);
   transition: all 0.3s ease;
-  z-index: 1000;
+  z-index: 1000; /* Asegura que esté por encima del contenido */
   overflow-y: auto;
 }
 
@@ -50,10 +60,11 @@
   border-left-color: var(--primary-color);
 }
 
-/* Content Styles */
+/* Content Styles - Márgenes dinámicos */
 main {
   transition: margin-left 0.3s ease;
-  margin-left: 60px;
+  /* Valores iniciales, se sobrescriben con las clases de abajo */
+  margin-left: 60px; 
 }
 
 .content-expanded {
@@ -64,49 +75,31 @@ main {
   margin-left: 60px !important;
 }
 
-/* Dark Mode Styles */
-body.dark-mode {
-  --bg-color: #1a1d21;
-  --text-color: #e9ecef;
-  --light-color: #2d3238;
-  --dark-color: #f8f9fa;
-  --border-color: #495057;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
-
-body.dark-mode .bg-white {
-  background-color: #2d3238 !important;
-}
-
-body.dark-mode .navbar,
-body.dark-mode .sidebar,
-body.dark-mode footer {
-  background-color: #2d3238 !important;
+/* Dark Mode Specific Styles */
+[data-theme="dark"] .sidebar,
+[data-theme="dark"] .navbar,
+[data-theme="dark"] footer {
+  background-color: var(--light-color) !important;
   border-color: var(--border-color) !important;
   color: var(--text-color) !important;
 }
 
-body.dark-mode .border {
-  border-color: var(--border-color) !important;
-}
-
-body.dark-mode .card {
+[data-theme="dark"] .card {
   background-color: #343a40 !important;
   color: var(--text-color) !important;
 }
 
-body.dark-mode .btn-outline-primary {
+[data-theme="dark"] .btn-outline-primary {
   color: var(--primary-color);
   border-color: var(--primary-color);
 }
 
-body.dark-mode .btn-outline-primary:hover {
+[data-theme="dark"] .btn-outline-primary:hover {
   background-color: var(--primary-color);
   color: white;
 }
 
-body.dark-mode .sidebar .nav-link:hover {
+[data-theme="dark"] .sidebar .nav-link:hover {
   background-color: #495057 !important;
 }
 
@@ -127,6 +120,11 @@ body.dark-mode .sidebar .nav-link:hover {
   }
   
   .sidebar {
-    z-index: 1100;
+    z-index: 1100; /* Más alto en móviles para overlay */
+    margin-top: 56px; /* Alineado con el navbar */
+  }
+  
+  main {
+    margin-left: 0 !important;
   }
 }

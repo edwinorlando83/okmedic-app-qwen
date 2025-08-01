@@ -1,0 +1,41 @@
+/* src/app/atencion-medica/atencion-medica.component.css */
+.card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.badge-warning {
+  background-color: var(--warning-color) !important;
+  color: var(--dark-color) !important;
+}
+
+.badge-info {
+  background-color: var(-- secondary-color) !important;
+  color: white !important;
+}
+
+.badge-success {
+  background-color: var(--success-color) !important;
+  color: white !important;
+}
+
+.btn-group .btn {
+  border-radius: 6px !important;
+}
+
+.border-start {
+  border-left: 4px solid currentColor !important;
+}

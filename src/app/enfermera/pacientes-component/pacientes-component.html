@@ -1,0 +1,202 @@
+<!-- src/app/pacientes/pacientes.component.html -->
+<div class="container-fluid">
+  <!-- Encabezado -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-0">Pacientes</h2>
+      <p class="text-muted">Gestión de pacientes registrados</p>
+    </div>
+    <div class="d-flex gap-2">
+      <div class="input-group" style="width: 300px;">
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Buscar paciente..." 
+          [(ngModel)]="searchTerm"
+        >
+        <button class="btn btn-outline-secondary" type="button">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+      <button class="btn btn-primary">
+        <i class="fas fa-plus me-1"></i> Nuevo Paciente
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="d-flex flex-wrap gap-3">
+            <div>
+              <label class="form-label mb-1">Estado</label>
+              <select class="form-select">
+                <option>Todos</option>
+                <option>Activo</option>
+                <option>Inactivo</option>
+                <option>Nuevo</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label mb-1">Género</label>
+              <select class="form-select">
+                <option>Todos</option>
+                <option>Masculino</option>
+                <option>Femenino</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label mb-1">Edad</label>
+              <select class="form-select">
+                <option>Todas</option>
+                <option>0-18</option>
+                <option>19-35</option>
+                <option>36-50</option>
+                <option>51+</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Listado de Pacientes -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0">Pacientes Registrados</h5>
+          <small class="text-muted">{{ pacientes.length }} pacientes encontrados</small>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Cédula</th>
+                  <th>Nombres</th>
+                  <th>Apellidos</th>
+                  <th>Edad</th>
+                  <th>Género</th>
+                  <th>Teléfono</th>
+                  <th>Última Visita</th>
+                  <th>Próxima Cita</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let paciente of pacientes">
+                  <td class="fw-medium">{{ paciente.cedula }}</td>
+                  <td>{{ paciente.nombres }}</td>
+                  <td>{{ paciente.apellidos }}</td>
+                  <td>{{ paciente.edad }}</td>
+                  <td>{{ paciente.genero }}</td>
+                  <td>{{ paciente.telefono }}</td>
+                  <td>{{ paciente.ultimaVisita }}</td>
+                  <td>
+                    <span *ngIf="paciente.proximaCita" class="text-primary">
+                      {{ paciente.proximaCita }}
+                    </span>
+                    <span *ngIf="!paciente.proximaCita" class="text-muted">
+                      Sin cita
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge" [ngClass]="getEstadoClass(paciente.estado)">
+                      {{ paciente.estado | titlecase }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <button 
+                        class="btn btn-sm btn-outline-primary" 
+                        (click)="verFicha(paciente)"
+                        title="Ver Ficha"
+                      >
+                        <i class="fas fa-file-medical"></i>
+                      </button>
+                      <button 
+                        class="btn btn-sm btn-outline-success" 
+                        (click)="programarCita(paciente)"
+                        title="Programar Cita"
+                      >
+                        <i class="fas fa-calendar-plus"></i>
+                      </button>
+                      <button 
+                        class="btn btn-sm btn-outline-secondary" 
+                        (click)="editarPaciente(paciente)"
+                        title="Editar"
+                      >
+                        <i class="fas fa-edit"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="row mt-4">
+    <div class="col-md-3">
+      <div class="card border-start border-success border-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h6 class="text-muted">Activos</h6>
+              <h3 class="mb-0">124</h3>
+            </div>
+            <i class="fas fa-user-check text-success fa-2x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-start border-primary border-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h6 class="text-muted">Nuevos</h6>
+              <h3 class="mb-0">18</h3>
+            </div>
+            <i class="fas fa-user-plus text-primary fa-2x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-start border-secondary border-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h6 class="text-muted">Inactivos</h6>
+              <h3 class="mb-0">32</h3>
+            </div>
+            <i class="fas fa-user-times text-secondary fa-2x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-start border-info border-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h6 class="text-muted">Total</h6>
+              <h3 class="mb-0">174</h3>
+            </div>
+            <i class="fas fa-users text-info fa-2x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
