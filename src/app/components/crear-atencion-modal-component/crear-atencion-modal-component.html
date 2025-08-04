@@ -1,0 +1,95 @@
+<!-- src/app/agenda/crear-atencion-modal/crear-atencion-modal.component.html -->
+<div class="modal-header bg-primary text-white">
+  <h4 class="modal-title">
+    <i class="fas fa-notes-medical me-2"></i>Crear Nueva Atención
+  </h4>
+  <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="cancelar()"></button>
+</div>
+
+<div class="modal-body">
+  <!-- Mensaje de carga de catálogos -->
+  <div *ngIf="cargandoCatalogos" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando catálogos...</p>
+  </div>
+
+  <!-- Mensaje de error de catálogos -->
+  <div *ngIf="errorCatalogos && !cargandoCatalogos" class="alert alert-danger" role="alert">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    {{ errorCatalogos }}
+  </div>
+
+  <!-- Formulario de selección (visible cuando no hay carga/error) -->
+  <div *ngIf="!cargandoCatalogos && !errorCatalogos">
+    <div class="mb-3">
+      <label for="tipoAtencion" class="form-label">Tipo de Atención *</label>
+      <select
+        id="tipoAtencion"
+        class="form-select"
+        [(ngModel)]="tipoAtencionSeleccionado"
+        [disabled]="enviando"
+        required
+      >
+        <option value="">Seleccione un tipo de atención</option>
+        <option *ngFor="let item of tiposAtencion" [value]="item.name">
+          {{ item.tipate_desc }}
+        </option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="cronologia" class="form-label">Cronología *</label>
+      <select
+        id="cronologia"
+        class="form-select"
+        [(ngModel)]="cronologiaSeleccionada"
+        [disabled]="enviando"
+        required
+      >
+        <option value="">Seleccione una cronología</option>
+        <option *ngFor="let item of cronologias" [value]="item.name">
+          {{ item.cro_desc }}
+        </option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="lugarAtencion" class="form-label">Lugar de Atención *</label>
+      <select
+        id="lugarAtencion"
+        class="form-select"
+        [(ngModel)]="lugarAtencionSeleccionado"
+        [disabled]="enviando"
+        required
+      >
+        <option value="">Seleccione un lugar de atención</option>
+        <option *ngFor="let item of lugaresAtencion" [value]="item.name">
+          {{ item.lugate_desc }}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer bg-light">
+  <button
+    type="button"
+    class="btn btn-outline-secondary"
+    (click)="cancelar()"
+    [disabled]="enviando"
+  >
+    <i class="fas fa-times me-1"></i>Cancelar
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="crearAtencion()"
+    [disabled]="cargandoCatalogos || errorCatalogos || enviando"
+  >
+    <span *ngIf="enviando" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+    <i *ngIf="!enviando" class="fas fa-check me-1"></i>
+    {{ enviando ? 'Creando...' : 'Crear Atención' }}
+  </button>
+</div>

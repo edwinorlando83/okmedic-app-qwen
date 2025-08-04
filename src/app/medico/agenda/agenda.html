@@ -66,7 +66,7 @@
     <!-- Contenido de las Pestañas -->
     <div class="tab-content">
       <!-- Agendas Disponibles -->
-    
+      
     <div
     class="tab-pane fade"
     [ngClass]="{ 'show active': activeTab === 'disponibles' }"
@@ -186,18 +186,18 @@
             <div class="cita-footer">
  
 
-              <button  (click)="abrirSelectorPacientes()"
-                class="btn cita-assign-btn"
-                [ngClass]="{
-                  'btn-success': cita.estcit_descripcion === 'CREADA',
-                  'btn-secondary': cita.estcit_descripcion !== 'CREADA'
-                }"
-                [disabled]="cita.estcit_descripcion !== 'CREADA'"
-             
-              >
-                <i class="fas fa-calendar-plus me-1"></i>
-                {{ cita.estcit_descripcion === 'CREADA' ? 'Asignar Cita' : 'No Disponible' }}
-              </button>
+  <button  
+    (click)="asignarCita(cita)"  
+    class="btn cita-assign-btn"
+    [ngClass]="{
+      'btn-success': cita.estcit_descripcion === 'CREADA',
+      'btn-secondary': cita.estcit_descripcion !== 'CREADA'
+    }"
+    [disabled]="cita.estcit_descripcion !== 'CREADA'"
+  >
+    <i class="fas fa-calendar-plus me-1"></i>
+    {{ cita.estcit_descripcion === 'CREADA' ? 'Asignar Cita' : 'No Disponible' }}
+  </button>
             </div>
           </div>
         </div>
@@ -218,145 +218,359 @@
     </div>
   </div>
       <!-- Citas Programadas -->
-      <div
-        class="tab-pane fade"
-        [ngClass]="{ 'show active': activeTab === 'programadas' }"
-      >
-        <div class="row g-4">
-          <div class="col-md-6 col-lg-4">
-            <div class="card border-start border-warning border-4 h-100 shadow-sm">
-              <div class="card-body">
-                <div class="d-flex justify-content-between">
-                  <h5 class="card-title">09:00</h5>
-                  <span class="badge badge-warning">Pendiente</span>
-                </div>
-                <p class="card-text">
-                  <i class="fas fa-user me-2 text-warning"></i><strong>Carlos Mendoza</strong><br>
-                  <i class="fas fa-stethoscope me-2 text-warning"></i>Consulta General<br>
-                  <i class="fas fa-phone me-2 text-warning"></i>0987654321<br>
-                </p>
-                <div class="d-grid gap-2">
-                  <button class="btn btn-sm btn-primary">Iniciar Consulta</button>
-                  <button class="btn btn-sm btn-outline-secondary">Ver Historial</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <div class="card border-start border-warning border-4 h-100 shadow-sm">
-              <div class="card-body">
-                <div class="d-flex justify-content-between">
-                  <h5 class="card-title">10:30</h5>
-                  <span class="badge badge-warning">Pendiente</span>
-                </div>
-                <p class="card-text">
-                  <i class="fas fa-user me-2 text-warning"></i><strong>Ana Rodríguez</strong><br>
-                  <i class="fas fa-stethoscope me-2 text-warning"></i>Control de Diabetes<br>
-                  <i class="fas fa-phone me-2 text-warning"></i>0912345678<br>
-                </p>
-                <div class="d-grid gap-2">
-                  <button class="btn btn-sm btn-primary">Iniciar Consulta</button>
-                  <button class="btn btn-sm btn-outline-secondary">Ver Historial</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <div class="card border-start border-warning border-4 h-100 shadow-sm">
-              <div class="card-body">
-                <div class="d-flex justify-content-between">
-                  <h5 class="card-title">11:15</h5>
-                  <span class="badge badge-warning">Pendiente</span>
-                </div>
-                <p class="card-text">
-                  <i class="fas fa-user me-2 text-warning"></i><strong>Luis Fernández</strong><br>
-                  <i class="fas fa-stethoscope me-2 text-warning"></i>Revisión Postoperatoria<br>
-                  <i class="fas fa-phone me-2 text-warning"></i>0987651234<br>
-                </p>
-                <div class="d-grid gap-2">
-                  <button class="btn btn-sm btn-primary">Iniciar Consulta</button>
-                  <button class="btn btn-sm btn-outline-secondary">Ver Historial</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+<div
+  class="tab-pane fade"
+  [ngClass]="{ 'show active': activeTab === 'programadas' }"
+>
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargandoCitasProgramadas" class="text-center py-5">
+    <div class="spinner-border spinner-border-custom text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3 h5 text-primary">Cargando citas programadas...</p>
+  </div>
 
-      <!-- Citas en Curso -->
-      <div
-        class="tab-pane fade"
-        [ngClass]="{ 'show active': activeTab === 'curso' }"
-      >
-        <div class="row g-4">
-          <div class="col-md-6 col-lg-4">
-            <div class="card border-start border-info border-4 h-100 shadow-sm">
-              <div class="card-body">
-                <div class="d-flex justify-content-between">
-                  <h5 class="card-title">08:30</h5>
-                  <span class="badge badge-info">En Curso</span>
-                </div>
-                <p class="card-text">
-                  <i class="fas fa-user me-2 text-info"></i><strong>Juan Pérez</strong><br>
-                  <i class="fas fa-stethoscope me-2 text-info"></i>Consulta General<br>
-                  <i class="fas fa-clock me-2 text-info"></i>Tiempo: 25 min<br>
-                </p>
-                <div class="d-grid gap-2">
-                  <button class="btn btn-sm btn-success">Completar Consulta</button>
-                  <button class="btn btn-sm btn-outline-secondary">Agregar Notas</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+  <!-- Mensaje de error -->
+  <div *ngIf="errorCitasProgramadas && !cargandoCitasProgramadas" class="alert alert-danger alert-atencion" role="alert">
+    <div class="d-flex">
+      <i class="fas fa-exclamation-triangle me-3"></i>
+      <div>
+        <h5 class="alert-heading">¡Ups! Algo salió mal</h5>
+        <p class="mb-0">{{ errorCitasProgramadas }}</p>
       </div>
+    </div>
+  </div>
 
-      <!-- Citas Completadas -->
-      <div
-        class="tab-pane fade"
-        [ngClass]="{ 'show active': activeTab === 'completadas' }"
+  <!-- Lista de citas programadas -->
+  <div *ngIf="!cargandoCitasProgramadas && !errorCitasProgramadas">
+    
+    <!-- Mensaje si no hay citas -->
+    <div *ngIf="citasProgramadas.length === 0" class="alert alert-info text-center" role="alert">
+      <i class="fas fa-calendar-plus fa-2x mb-2"></i>
+      <h5>No hay citas programadas</h5>
+      <p class="mb-0">Actualmente no tienes citas programadas.</p>
+    </div>
+
+    <!-- Grid de citas programadas -->
+    <div class="row g-4" *ngIf="citasProgramadas.length > 0">
+      <div 
+        *ngFor="let cita of citasProgramadas" 
+        class="col-md-6 col-lg-4"
       >
-        <div class="row g-4">
-          <div class="col-md-6 col-lg-4">
-            <div class="card border-start border-success border-4 h-100 shadow-sm">
-              <div class="card-body">
-                <div class="d-flex justify-content-between">
-                  <h5 class="card-title">08:00</h5>
-                  <span class="badge badge-success">Completada</span>
-                </div>
-                <p class="card-text">
-                  <i class="fas fa-user me-2 text-success"></i><strong>María González</strong><br>
-                  <i class="fas fa-stethoscope me-2 text-success"></i>Consulta General<br>
-                  <i class="fas fa-diagnoses me-2 text-success"></i><strong>Diagnóstico:</strong> Gripe<br>
-                </p>
-                <div class="d-grid gap-2">
-                  <button class="btn btn-sm btn-outline-primary">Ver Ficha</button>
-                  <button class="btn btn-sm btn-outline-secondary">Imprimir Receta</button>
-                </div>
+        <div 
+          class="card cita-card shadow-sm h-100"
+          [ngStyle]="{ 
+            'border-left': '4px solid ' + (cita.estcit_color || '#ffc107'),
+            'box-shadow': '0 4px 8px rgba(0,0,0,0.08)'
+          }"
+        >
+          <div class="cita-header">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <div class="cita-time">{{ cita.age_hinicio }} - {{ cita.age_hfin }}</div>
+                <div class="cita-duration">{{ cita.age_duracion }} minutos</div>
+              </div>
+              <span 
+                class="cita-badge" 
+                [ngClass]="{
+                  'estado-creada': cita.estcit_descripcion === 'CREADA',
+                  'estado-reservada': cita.estcit_descripcion === 'RESERVADA',
+                  'estado-bloqueada': cita.estcit_descripcion === 'BLOQUEADA',
+                  'estado-cancelada': cita.estcit_descripcion === 'CANCELADA'
+                }"
+                [ngStyle]="{ 
+                  'background': cita.estcit_color ? 'linear-gradient(135deg, ' + cita.estcit_color + ', ' + ajustarBrilloColor(cita.estcit_color, 20) + ')' : '',
+                  'color': necesitaTextoNegro(cita.estcit_color) ? '#000' : '#fff'
+                }"
+              >
+                {{ cita.estcit_descripcion }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="cita-body">
+            <h6 class="card-title text-primary mb-2">
+              <i class="fas fa-user-injured me-1"></i>{{ cita.pac_nombrecompleto }}
+            </h6>
+            <div class="cita-info">
+              <div class="mb-2">
+                <i class="fas fa-calendar-day me-1"></i>
+                <strong>Fecha:</strong> {{ cita.age_fechacita }}
+              </div>
+              <div class="mb-2">
+                <i class="fas fa-clinic-medical me-1"></i>
+                <strong>Unidad:</strong> {{ cita.psxum_codigo.split('/')[1] }}
+              </div>
+              <div class="mb-2">
+                <i class="fas fa-laptop-medical me-1"></i>
+                <strong>Modalidad:</strong> {{ cita.mod_descripcion }}
+              </div>
+              <div class="mb-2">
+                <i class="fas fa-phone me-1"></i>
+                <strong>Celular:</strong> {{ cita.pac_celular || 'No disponible' }}
+              </div>
+              <div>
+                <i class="fas fa-envelope me-1"></i>
+                <strong>Email:</strong> {{ cita.pac_email || 'No disponible' }}
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-lg-4">
-            <div class="card border-start border-success border-4 h-100 shadow-sm">
-              <div class="card-body">
-                <div class="d-flex justify-content-between">
-                  <h5 class="card-title">09:30</h5>
-                  <span class="badge badge-success">Completada</span>
-                </div>
-                <p class="card-text">
-                  <i class="fas fa-user me-2 text-success"></i><strong>Pedro Martín</strong><br>
-                  <i class="fas fa-stethoscope me-2 text-success"></i>Control de Tensión<br>
-                  <i class="fas fa-diagnoses me-2 text-success"></i><strong>Diagnóstico:</strong> Hipertensión Controlada<br>
-                </p>
-                <div class="d-grid gap-2">
-                  <button class="btn btn-sm btn-outline-primary">Ver Ficha</button>
-                  <button class="btn btn-sm btn-outline-secondary">Imprimir Receta</button>
-                </div>
-              </div>
+          
+          <div class="cita-footer">
+            <div class="d-grid gap-2">
+              <button class="btn btn-sm btn-primary" 
+               (click)="abrirModalCrearAtencion(cita.name)"
+              >
+                <i class="fas fa-play me-1"></i>Iniciar Consulta
+              </button>
+
+    <button 
+      class="btn btn-sm btn-outline-danger" 
+      (click)="cancelarCita(cita)"
+    >
+      <i class="fas fa-times-circle me-1"></i>Cancelar Cita
+    </button>
+
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+<!-- Citas en Curso -->
+<div
+  class="tab-pane fade"
+  [ngClass]="{ 'show active': activeTab === 'curso' }"
+>
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargandoCitasEnCurso" class="text-center py-5">
+    <div class="spinner-border spinner-border-custom text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3 h5 text-primary">Cargando citas en curso...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="errorCitasEnCurso && !cargandoCitasEnCurso" class="alert alert-danger alert-atencion" role="alert">
+    <div class="d-flex">
+      <i class="fas fa-exclamation-triangle me-3"></i>
+      <div>
+        <h5 class="alert-heading">¡Ups! Algo salió mal</h5>
+        <p class="mb-0">{{ errorCitasEnCurso }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de citas en curso -->
+  <div *ngIf="!cargandoCitasEnCurso && !errorCitasEnCurso">
+    
+    <!-- Mensaje si no hay citas -->
+    <div *ngIf="citasEnCurso.length === 0" class="alert alert-info text-center" role="alert">
+      <i class="fas fa-user-clock fa-2x mb-2"></i>
+      <h5>No hay citas en curso</h5>
+      <p class="mb-0">Actualmente no tienes citas en proceso de atención.</p>
+    </div>
+
+    <!-- Grid de citas en curso -->
+    <div class="row g-4" *ngIf="citasEnCurso.length > 0">
+      <div 
+        *ngFor="let cita of citasEnCurso" 
+        class="col-md-6 col-lg-4"
+      >
+        <div 
+          class="card cita-card shadow-sm h-100"
+          [ngStyle]="{ 
+            'border-left': '4px solid ' + (cita.estcit_color || '#007bff'),
+            'box-shadow': '0 4px 8px rgba(0,0,0,0.08)'
+          }"
+        >
+          <div class="cita-header">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <div class="cita-time">{{ cita.age_hinicio }} - {{ cita.age_hfin }}</div>
+                <div class="cita-duration">{{ cita.age_duracion }} minutos</div>
+              </div>
+              <span 
+                class="cita-badge" 
+                [ngClass]="{
+                  'estado-creada': cita.estcit_descripcion === 'CREADA',
+                  'estado-reservada': cita.estcit_descripcion === 'RESERVADA',
+                  'estado-bloqueada': cita.estcit_descripcion === 'BLOQUEADA',
+                  'estado-cancelada': cita.estcit_descripcion === 'CANCELADA'
+                }"
+                [ngStyle]="{ 
+                  'background': cita.estcit_color ? 'linear-gradient(135deg, ' + cita.estcit_color + ', ' + ajustarBrilloColor(cita.estcit_color, 20) + ')' : '',
+                  'color': necesitaTextoNegro(cita.estcit_color) ? '#000' : '#fff'
+                }"
+              >
+                {{ cita.estcit_descripcion }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="cita-body">
+            <h6 class="card-title text-primary mb-2">
+              <i class="fas fa-user-injured me-1"></i>{{ cita.pac_nombrecompleto }}
+            </h6>
+            <div class="cita-info">
+              <div class="mb-2">
+                <i class="fas fa-calendar-day me-1"></i>
+                <strong>Fecha:</strong> {{ cita.age_fechacita }}
+              </div>
+              <div class="mb-2">
+                <i class="fas fa-user-md me-1"></i>
+                <strong>Profesional:</strong> {{ cita.prosal_nombrecompleto }}
+              </div>
+              <div class="mb-2">
+                <i class="fas fa-clinic-medical me-1"></i>
+                <strong>Unidad:</strong> {{ cita.psxum_codigo.split('/')[1] }}
+              </div>
+              <div class="mb-2">
+                <i class="fas fa-laptop-medical me-1"></i>
+                <strong>Modalidad:</strong> {{ cita.mod_descripcion }}
+              </div>
+              <div class="mb-2">
+                <i class="fas fa-phone me-1"></i>
+                <strong>Celular:</strong> {{ cita.pac_celular || 'No disponible' }}
+              </div>
+              <div>
+                <i class="fas fa-envelope me-1"></i>
+                <strong>Email:</strong> {{ cita.pac_email || 'No disponible' }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="cita-footer">
+            <button 
+              class="btn btn-primary w-100" 
+              (click)="irAAtencion(cita)"
+            >
+              <i class="fas fa-arrow-right me-1"></i> Ir a Atención
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+     
+<!-- Citas Completadas -->
+<div
+  class="tab-pane fade"
+  [ngClass]="{ 'show active': activeTab === 'completadas' }"
+>
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargandoCitasCompletadas" class="text-center py-5">
+    <div class="spinner-border spinner-border-custom text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3 h5 text-primary">Cargando citas completadas...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="errorCitasCompletadas && !cargandoCitasCompletadas" class="alert alert-danger alert-atencion" role="alert">
+    <div class="d-flex">
+      <i class="fas fa-exclamation-triangle me-3"></i>
+      <div>
+        <h5 class="alert-heading">¡Ups! Algo salió mal</h5>
+        <p class="mb-0">{{ errorCitasCompletadas }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de citas completadas -->
+  <div *ngIf="!cargandoCitasCompletadas && !errorCitasCompletadas">
+    
+    <!-- Mensaje si no hay citas -->
+    <div *ngIf="citasCompletadas.length === 0" class="alert alert-info text-center" role="alert">
+      <i class="fas fa-clipboard-check fa-2x mb-2"></i>
+      <h5>No hay citas completadas</h5>
+      <p class="mb-0">Aún no tienes citas finalizadas.</p>
+    </div>
+
+    <!-- Grid de citas completadas -->
+    <div class="row g-4" *ngIf="citasCompletadas.length > 0">
+      <div 
+        *ngFor="let cita of citasCompletadas" 
+        class="col-md-6 col-lg-4"
+      >
+        <div 
+          class="card cita-card shadow-sm h-100"
+          [ngStyle]="{ 
+            'border-left': '4px solid ' + (cita.estcit_color || '#28a745'),
+            'box-shadow': '0 4px 8px rgba(0,0,0,0.08)'
+          }"
+        >
+          <div class="cita-header">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <div class="cita-time">{{ cita.age_hinicio }} - {{ cita.age_hfin }}</div>
+                <div class="cita-duration">{{ cita.age_duracion }} minutos</div>
+              </div>
+              <span 
+                class="cita-badge estado-completada" 
+                [ngStyle]="{ 
+                  'background': cita.estcit_color ? 'linear-gradient(135deg, ' + cita.estcit_color + ', ' + ajustarBrilloColor(cita.estcit_color, 20) + ')' : 'var(--success-color)',
+                  'color': necesitaTextoNegro(cita.estcit_color) ? '#000' : '#fff'
+                }"
+              >
+                {{ cita.estcit_descripcion }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="cita-body">
+            <h6 class="card-title text-success mb-2">
+              <i class="fas fa-user-check me-1"></i>{{ cita.pac_nombrecompleto }}
+            </h6>
+            <div class="cita-info">
+              <div class="mb-2">
+                <i class="fas fa-calendar-day me-1"></i>
+                <strong>Fecha:</strong> {{ cita.age_fechacita }}
+              </div>
+              <div class="mb-2">
+                <i class="fas fa-user-md me-1"></i>
+                <strong>Profesional:</strong> {{ cita.prosal_nombrecompleto }}
+              </div>
+              <div class="mb-2">
+                <i class="fas fa-clinic-medical me-1"></i>
+                <strong>Unidad:</strong> {{ cita.psxum_codigo.split('/')[1] }}
+              </div>
+              <div class="mb-2">
+                <i class="fas fa-laptop-medical me-1"></i>
+                <strong>Modalidad:</strong> {{ cita.mod_descripcion }}
+              </div>
+              <div class="mb-2">
+                <i class="fas fa-phone me-1"></i>
+                <strong>Celular:</strong> {{ cita.pac_celular || 'No disponible' }}
+              </div>
+              <div>
+                <i class="fas fa-envelope me-1"></i>
+                <strong>Email:</strong> {{ cita.pac_email || 'No disponible' }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="cita-footer">
+            <div class="d-grid gap-2">
+              <button 
+                class="btn btn-sm btn-outline-primary" 
+                (click)="verFicha(cita)"
+              >
+                <i class="fas fa-file-medical me-1"></i>Ver Ficha
+              </button>
+              <button class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-print me-1"></i>Imprimir Receta
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
     </div>
   </main>
 </div>

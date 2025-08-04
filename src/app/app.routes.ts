@@ -1,6 +1,6 @@
 // src/app/app.routes.ts
 import { Routes } from '@angular/router';
- 
+
 import { inject } from '@angular/core';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginComponent } from './auth/login/login';
@@ -12,6 +12,7 @@ import { SignosVitalesComponent } from './enfermera/signos-vitales-component/sig
 import { AdmisionComponent } from './enfermera/admision-component/admision-component';
 import { PacientesComponent } from './enfermera/pacientes-component/pacientes-component';
 import { ConfiguracionComponent } from './configuracion-component/configuracion-component';
+import { DetalleAtencionComponent } from './medico/detalle-atencion-component/detalle-atencion-component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -23,11 +24,13 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'agenda', component: AgendaComponent },
-      { path: 'atencion-medica', component: AtencionMedicaComponent }, 
-      { path: 'signos-vitales', component: SignosVitalesComponent },   
-      { path: 'admision', component: AdmisionComponent },             
-      { path: 'pacientes', component: PacientesComponent },           
-      { path: 'configuracion', component: ConfiguracionComponent },    
+      { path: 'atencion-medica', component: AtencionMedicaComponent },
+      { path: 'signos-vitales', component: SignosVitalesComponent },
+      { path: 'admision', component: AdmisionComponent },
+      { path: 'pacientes', component: PacientesComponent },
+      { path: 'configuracion', component: ConfiguracionComponent },
+      { path: 'atencion-medica/:ate_id',    component: DetalleAtencionComponent}
+    
     ]
   },
   { path: '**', redirectTo: '/login' }

@@ -1,7 +1,3 @@
-/* src/app/auth/login.component.css */
-/* Podemos dejar este archivo vacío o agregar estilos específicos */
-/* Los estilos principales vienen de Bootstrap y las variables globales */
-
 .card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }

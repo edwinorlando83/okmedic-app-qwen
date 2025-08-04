@@ -1,0 +1,34 @@
+/* src/app/agenda/crear-atencion-modal/crear-atencion-modal.component.css */
+.modal-header {
+  border-top-left-radius: calc(0.5rem - 1px);
+  border-top-right-radius: calc(0.5rem - 1px);
+}
+
+.modal-footer {
+  border-bottom-left-radius: calc(0.5rem - 1px);
+  border-bottom-right-radius: calc(0.5rem - 1px);
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+.form-select:focus {
+  border-color: #0077b6;
+  box-shadow: 0 0 0 0.25rem rgba(0, 119, 182, 0.25);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--acento-fuerte);
+  border-color: var(--acento-fuerte);
+}
+
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}

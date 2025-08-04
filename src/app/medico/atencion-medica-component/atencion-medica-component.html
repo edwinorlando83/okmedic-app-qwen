@@ -1,135 +1,248 @@
 <!-- src/app/atencion-medica/atencion-medica.component.html -->
-<div class="container-fluid">
+<div class="container-fluid py-4">
   <!-- Encabezado -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
       <h2 class="mb-0">Atención Médica</h2>
-      <p class="text-muted">Gestiona tus consultas médicas</p>
+      <p class="text-muted">Gestiona las atenciones médicas</p>
     </div>
-    <div>
-      <input type="date" class="form-control" [value]="selectedDate">
+    <button class="btn btn-primary" (click)="aplicarFiltros()">
+      <i class="fas fa-sync-alt me-1"></i>Actualizar
+    </button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="card mb-4">
+    <div class="card-header bg-white py-3">
+      <h5 class="mb-0">
+        <i class="fas fa-filter me-2"></i>Filtros de Búsqueda
+      </h5>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <!-- Fechas -->
+        <div class="col-md-6 col-lg-3">
+          <label class="form-label">Fecha Desde</label>
+          <input 
+            type="date" 
+            class="form-control" 
+            [(ngModel)]="filtros.fechaDesde"
+          >
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <label class="form-label">Fecha Hasta</label>
+          <input 
+            type="date" 
+            class="form-control" 
+            [(ngModel)]="filtros.fechaHasta"
+          >
+        </div>
+        
+        <!-- Nombre Paciente -->
+        <div class="col-md-6 col-lg-3">
+          <label class="form-label">Nombre Paciente</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Buscar por nombre..."
+            [(ngModel)]="filtros.nombrePaciente"
+          >
+        </div>
+        
+        <!-- Cédula Paciente -->
+        <div class="col-md-6 col-lg-3">
+          <label class="form-label">Cédula Paciente</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Buscar por cédula..."
+            [(ngModel)]="filtros.cedulaPaciente"
+          >
+        </div>
+        
+        <!-- Lugar de Atención -->
+        <div class="col-md-6 col-lg-3">
+          <label class="form-label">Lugar de Atención</label>
+          <select class="form-select" [(ngModel)]="filtros.lugarAtencion">
+            <option value="">Todos los lugares</option>
+            <option *ngFor="let lugar of lugaresAtencion" [value]="lugar.name">
+              {{ lugar.lugate_desc }}
+            </option>
+          </select>
+        </div>
+        
+        <!-- Cronología -->
+        <div class="col-md-6 col-lg-3">
+          <label class="form-label">Cronología</label>
+          <select class="form-select" [(ngModel)]="filtros.cronologia">
+            <option value="">Todas las cronologías</option>
+            <option *ngFor="let cro of cronologias" [value]="cro.name">
+              {{ cro.cro_desc }}
+            </option>
+          </select>
+        </div>
+        
+        <!-- Sexo -->
+        <div class="col-md-6 col-lg-3">
+          <label class="form-label">Sexo</label>
+          <select class="form-select" [(ngModel)]="filtros.sexo">
+            <option value="">Ambos sexos</option>
+            <option value="1">Hombre</option>
+            <option value="2">Mujer</option>
+          </select>
+        </div>
+        
+        <!-- Estado -->
+        <div class="col-md-6 col-lg-3">
+          <label class="form-label">Estado</label>
+          <select class="form-select" [(ngModel)]="filtros.estado">
+            <option value="">Todos los estados</option>
+            <option value="E">En Enfermería</option>
+            <option value="F">Finalizada</option>
+            <option value="I">Iniciada</option>
+            <option value="M">En Consultorio Médico</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- Botones de acción -->
+      <div class="d-flex justify-content-end gap-2 mt-3">
+        <button class="btn btn-outline-secondary" (click)="limpiarFiltros()">
+          <i class="fas fa-broom me-1"></i>Limpiar
+        </button>
+        <button class="btn btn-primary" (click)="aplicarFiltros()">
+          <i class="fas fa-search me-1"></i>Buscar
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- Listado de Consultas -->
-  <div class="row">
-    <div class="col-12">
-      <div class="card border-0 shadow-sm">
-        <div class="card-header bg-white py-3">
-          <h5 class="mb-0">Consultas del Día</h5>
-        </div>
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-hover mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>ID</th>
-                  <th>Paciente</th>
-                  <th>Hora</th>
-                  <th>Motivo</th>
-                  <th>Estado</th>
-                  <th>Prioridad</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let consulta of consultas">
-                  <td class="fw-medium">{{ consulta.id }}</td>
-                  <td>{{ consulta.paciente }}</td>
-                  <td>{{ consulta.hora }}</td>
-                  <td>{{ consulta.motivo }}</td>
-                  <td>
-                    <span class="badge" [ngClass]="getEstadoClass(consulta.estado)">
-                      {{ consulta.estado | titlecase }}
-                    </span>
-                  </td>
-                  <td>
-                    <i [class]="getPrioridadIcon(consulta.prioridad)"></i>
-                    {{ consulta.prioridad | titlecase }}
-                  </td>
-                  <td>
-                    <div class="btn-group" role="group">
-                      <button 
-                        *ngIf="consulta.estado === 'pendiente'" 
-                        class="btn btn-sm btn-primary"
-                        (click)="iniciarConsulta(consulta)"
-                      >
-                        <i class="fas fa-play me-1"></i> Iniciar
-                      </button>
-                      <button 
-                        *ngIf="consulta.estado === 'en_curso'" 
-                        class="btn btn-sm btn-success"
-                        (click)="completarConsulta(consulta)"
-                      >
-                        <i class="fas fa-check me-1"></i> Completar
-                      </button>
-                      <button class="btn btn-sm btn-outline-secondary">
-                        <i class="fas fa-ellipsis-v"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando atenciones médicas...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error && !cargando" class="alert alert-danger" role="alert">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    {{ error }}
+  </div>
+
+  <!-- Lista de atenciones (cards) -->
+  <div *ngIf="!cargando && !error">
+    <div class="row g-4">
+      <div 
+        *ngFor="let atencion of atencionesFiltradas" 
+        class="col-md-6 col-lg-4"
+      >
+        <div class="card h-100 shadow-sm hover-lift">
+          <div class="card-header bg-white py-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0 text-primary">{{ atencion.name }}</h5>
+              <span class="badge" [ngClass]="formatearBadgeClase(atencion.proate_codigo)">
+                {{ formatearEstado(atencion.proate_codigo) }}
+              </span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <h6 class="text-muted mb-2">Paciente</h6>
+              <p class="mb-1">
+                <i class="fas fa-user me-2 text-primary"></i>
+                <strong>{{ atencion.pac_nombrecompleto }}</strong>
+              </p>
+              <p class="mb-1">
+                <i class="fas fa-id-card me-2 text-primary"></i>
+                {{ atencion.pac_identificacion }}
+              </p>
+              <p class="mb-0">
+                <i class="fas fa-venus-mars me-2 text-primary"></i>
+                {{ formatearSexo(atencion.sex_codigo) }}
+              </p>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="text-muted mb-2">Atención</h6>
+              <p class="mb-1">
+                <i class="fas fa-calendar-day me-2 text-info"></i>
+                {{ atencion.ate_fechaini |   fechaCompleta  }}
+              </p>
+              <p class="mb-1">
+                <i class="fas fa-clock me-2 text-info"></i>
+                {{ atencion.ate_horaini | horaFormato       }}
+              </p>
+              <p class="mb-0">
+                <i class="fas fa-map-marker-alt me-2 text-info"></i>
+                {{ atencion.lugate_desc }}
+              </p>
+            </div>
+            
+            <div>
+              <h6 class="text-muted mb-2">Profesional</h6>
+              <p class="mb-0">
+                <i class="fas fa-user-md me-2 text-success"></i>
+                {{ atencion.prosal_nombrecompleto }}
+              </p>
+            </div>
+          </div>
+          <div class="card-footer bg-white">
+            <button class="btn btn-sm btn-outline-primary w-100" (click)="verDetalle(atencion)">
+              <i class="fas fa-eye me-1"></i>Ver Detalle
+            </button>
           </div>
         </div>
       </div>
+    </div>
+    
+    <!-- Mensaje si no hay resultados -->
+    <div *ngIf="atencionesFiltradas.length === 0" class="text-center py-5">
+      <i class="fas fa-file-medical fa-3x text-muted mb-3"></i>
+      <h4 class="text-muted">No se encontraron atenciones</h4>
+      <p class="text-muted">Intente con otros criterios de búsqueda.</p>
     </div>
   </div>
 
-  <!-- Estadísticas -->
-  <div class="row mt-4">
-    <div class="col-md-3">
-      <div class="card border-start border-primary border-4">
-        <div class="card-body">
-          <div class="d-flex justify-content-between">
-            <div>
-              <h6 class="text-muted">Pendientes</h6>
-              <h3 class="mb-0">8</h3>
-            </div>
-            <i class="fas fa-clock text-primary fa-2x"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card border-start border-info border-4">
-        <div class="card-body">
-          <div class="d-flex justify-content-between">
-            <div>
-              <h6 class="text-muted">En Curso</h6>
-              <h3 class="mb-0">2</h3>
-            </div>
-            <i class="fas fa-user-md text-info fa-2x"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card border-start border-success border-4">
-        <div class="card-body">
-          <div class="d-flex justify-content-between">
-            <div>
-              <h6 class="text-muted">Completadas</h6>
-              <h3 class="mb-0">5</h3>
-            </div>
-            <i class="fas fa-check-circle text-success fa-2x"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card border-start border-danger border-4">
-        <div class="card-body">
-          <div class="d-flex justify-content-between">
-            <div>
-              <h6 class="text-muted">Urgentes</h6>
-              <h3 class="mb-0">3</h3>
-            </div>
-            <i class="fas fa-exclamation-triangle text-danger fa-2x"></i>
-          </div>
-        </div>
-      </div>
+  <!-- Paginación -->
+  <div *ngIf="atencionesFiltradas.length > 0 && totalPaginas > 1" class="mt-4">
+    <nav aria-label="Navegación de página">
+      <ul class="pagination justify-content-center mb-0">
+        <li class="page-item" [class.disabled]="paginaActual === 1">
+          <a class="page-link" href="javascript:void(0)" (click)="cambiarPagina(paginaActual - 1)">
+            <i class="fas fa-chevron-left"></i>
+          </a>
+        </li>
+        
+        <li 
+          *ngFor="let pageNum of getPageNumbers()" 
+          class="page-item"
+          [class.active]="pageNum === paginaActual"
+          [class.disabled]="pageNum === -1"
+        >
+          <a 
+            *ngIf="pageNum !== -1; else dots" 
+            class="page-link" 
+            href="javascript:void(0)" 
+            (click)="cambiarPagina(pageNum)"
+          >
+            {{ pageNum }}
+          </a>
+          <ng-template #dots>
+            <span class="page-link">...</span>
+          </ng-template>
+        </li>
+        
+        <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
+          <a class="page-link" href="javascript:void(0)" (click)="cambiarPagina(paginaActual + 1)">
+            <i class="fas fa-chevron-right"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="text-center text-muted small mt-2">
+      Página {{ paginaActual }} de {{ totalPaginas }}
     </div>
   </div>
 </div>

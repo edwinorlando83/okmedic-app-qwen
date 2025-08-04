@@ -1,0 +1,140 @@
+<!-- src/app/atencion-medica/detalle-atencion/detalle-atencion.component.html -->
+<div class="container">
+  <div class="patient-info">
+    <div class="info-card">
+      <h3>
+        <svg class="tab-icon" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+        </svg>
+        Información del Paciente
+      </h3>
+      <div class="info-field">
+        <label>Nombre:</label>
+        <span>{{ paciente.nombre }}</span>
+      </div>
+      <div class="info-field">
+        <label>Cédula:</label>
+        <span>{{ paciente.cedula }}</span>
+      </div>
+      <div class="info-field">
+        <label>Edad:</label>
+        <span>{{ paciente.edad }}</span>
+      </div>
+      <div class="info-field">
+        <label>Teléfono:</label>
+        <span>{{ paciente.telefono }}</span>
+      </div>
+    </div>
+    <div class="info-card">
+      <h3>
+        <svg class="tab-icon" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Información del Médico
+      </h3>
+      <div class="info-field">
+        <label>Doctor:</label>
+        <span>{{ medico.nombre }}</span>
+      </div>
+      <div class="info-field">
+        <label>Especialidad:</label>
+        <span>{{ medico.especialidad }}</span>
+      </div>
+      <div class="info-field">
+        <label>Registro:</label>
+        <span>{{ medico.registro }}</span>
+      </div>
+      <div class="info-field">
+        <label>Fecha:</label>
+        <span>{{ medico.fecha }}</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="main-content">
+    <div class="tabs-container">
+      <button 
+        *ngFor="let tab of tabs" 
+        class="tab-button"
+        [ngClass]="{ 'active': activeTab === tab.id }"
+        (click)="setActiveTab(tab.id)"
+      >
+        <svg class="tab-icon" fill="currentColor" [attr.viewBox]="'0 0 20 20'">
+          <path [attr.d]="tab.icon" />
+        </svg>
+        {{ tab.label }}
+      </button>
+    </div>
+    
+    <div class="content-area">
+      <!-- Aquí se cargarán dinámicamente los componentes hijos -->
+      <app-detalle-atencion-historial 
+        *ngIf="activeTab === 'historial'"  [ate_id]="ate_id">
+      </app-detalle-atencion-historial>
+     
+      <app-detalle-atencion-lugar-atencion
+        *ngIf="activeTab === 'lugar-atencion'"
+        [ate_id]="ate_id">
+      </app-detalle-atencion-lugar-atencion>
+      
+      <app-detalle-atencion-motivo-consulta 
+        *ngIf="activeTab === 'motivo-consulta'"
+        [ate_id]="ate_id">
+      </app-detalle-atencion-motivo-consulta>
+     
+      <app-detalle-atencion-antecedentes 
+        *ngIf="activeTab === 'antecedentes'"
+        [ate_id]="ate_id">
+      </app-detalle-atencion-antecedentes>
+       
+      <app-detalle-atencion-signos-vitales 
+        *ngIf="activeTab === 'signos-vitales'"
+        [ate_id]="ate_id">
+      </app-detalle-atencion-signos-vitales>
+        
+      <app-detalle-atencion-revicion-sistemas
+        *ngIf="activeTab === 'revision-sistemas'"
+        [ate_id]="ate_id">
+      </app-detalle-atencion-revicion-sistemas>
+      
+    
+      <app-detalle-atencion-examen-fisco
+        *ngIf="activeTab === 'examen-fisico'"
+        [ate_id]="ate_id">
+      </app-detalle-atencion-examen-fisco>
+      
+      <app-detalle-atencion-diagnostico 
+        *ngIf="activeTab === 'diagnostico'"
+        [ate_id]="ate_id">
+      </app-detalle-atencion-diagnostico>
+      <app-detalle-atencion-evolucion 
+        *ngIf="activeTab === 'evolucion'"
+        [ate_id]="ate_id">
+      </app-detalle-atencion-evolucion>
+      
+    
+      <app-detalle-atencion-consentimiento 
+        *ngIf="activeTab === 'consentimiento'"
+        [ate_id]="ate_id">
+      </app-detalle-atencion-consentimiento>
+      
+      <app-detalle-atencion-tratamiento 
+        *ngIf="activeTab === 'tratamiento'"
+        [ate_id]="ate_id">
+      </app-detalle-atencion-tratamiento>
+      
+      <app-detalle-atencion-procedimiento 
+        *ngIf="activeTab === 'procedimiento'"
+        [ate_id]="ate_id">
+      </app-detalle-atencion-procedimiento>
+      
+
+      <app-detalle-atencion-certificado 
+        *ngIf="activeTab === 'certificado'"
+        [ate_id]="ate_id">
+      </app-detalle-atencion-certificado>
+  
+
+    </div>
+  </div>
+</div>

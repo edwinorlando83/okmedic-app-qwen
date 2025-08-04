@@ -82,7 +82,7 @@ export class PacienteSelectorModalComponent implements OnInit {
     this.frappeApiService.list<Paciente>('OKM_PACIENTE', options).subscribe({
       next: (data) => {
         this.pacientes = data;
-                this.pacientesConEdad = data.map(paciente => ({
+        this.pacientesConEdad = data.map(paciente => ({
           ...paciente,
           edad: this.calcularEdad(paciente.pac_fechanac)
         }));
