@@ -13,6 +13,9 @@ import { AdmisionComponent } from './enfermera/admision-component/admision-compo
 import { PacientesComponent } from './enfermera/pacientes-component/pacientes-component';
 import { ConfiguracionComponent } from './configuracion-component/configuracion-component';
 import { DetalleAtencionComponent } from './medico/detalle-atencion-component/detalle-atencion-component';
+import { PacienteListComponent } from './paciente/paciente-list-component/paciente-list-component';
+import { PacienteFormComponent } from './paciente/paciente-form-component/paciente-form-component';
+import { PacienteDetailComponent } from './paciente/paciente-detail-component/paciente-detail-component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -27,10 +30,26 @@ export const routes: Routes = [
       { path: 'atencion-medica', component: AtencionMedicaComponent },
       { path: 'signos-vitales', component: SignosVitalesComponent },
       { path: 'admision', component: AdmisionComponent },
-      { path: 'pacientes', component: PacientesComponent },
+   
       { path: 'configuracion', component: ConfiguracionComponent },
-      { path: 'atencion-medica/:ate_id',    component: DetalleAtencionComponent}
-    
+      { path: 'atencion-medica/:ate_id', component: DetalleAtencionComponent },
+      {
+        path: 'pacientes',
+        component: PacienteListComponent
+      },
+      {
+        path: 'pacientes/nuevo',
+        component: PacienteFormComponent
+      },
+      {
+        path: 'pacientes/:id',
+        component: PacienteDetailComponent
+      },
+      {
+        path: 'pacientes/editar/:id',
+        component: PacienteFormComponent
+      },
+
     ]
   },
   { path: '**', redirectTo: '/login' }

@@ -1,0 +1,213 @@
+<!-- src/app/paciente/components/paciente-list/paciente-list.component.html -->
+<div class="container-fluid py-4">
+  <!-- Encabezado -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-0 text-primary">Listado de Pacientes</h2>
+      <p class="text-muted mb-0">Gestiona el registro de pacientes</p>
+    </div>
+    <button 
+      class="btn btn-primary btn-lg shadow-sm" 
+      (click)="router.navigate(['/pacientes/nuevo'])"
+    >
+      <i class="fas fa-user-plus me-2"></i>Nuevo Paciente
+    </button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="card mb-4 border-0 shadow-sm">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-4">
+          <label for="filtroNombre" class="form-label">Buscar por nombre</label>
+          <div class="input-group">
+            <span class="input-group-text bg-primary text-white">
+              <i class="fas fa-search"></i>
+            </span>
+            <input
+              type="text"
+              id="filtroNombre"
+              class="form-control form-control-lg"
+              placeholder="Nombre, apellido..."
+              [(ngModel)]="filtro"
+              (keyup.enter)="onBuscar()"
+            >
+            <button 
+              class="btn btn-outline-secondary" 
+              type="button" 
+              (click)="onLimpiar()"
+              [disabled]="!filtro"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 d-flex align-items-end">
+          <button 
+            class="btn btn-primary w-100 btn-lg" 
+            (click)="onBuscar()"
+            [disabled]="cargando"
+          >
+            <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            <i *ngIf="!cargando" class="fas fa-filter me-2"></i>
+            {{ cargando ? 'Buscando...' : 'Filtrar' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3 h5 text-primary">Cargando pacientes...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error && !cargando" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="d-flex">
+      <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+      <div>
+        <h5 class="alert-heading">¡Ups! Algo salió mal</h5>
+        <p class="mb-0">{{ error }}</p>
+      </div>
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <!-- Lista de pacientes -->
+  <div *ngIf="!cargando && !error">
+    <div class="row g-4">
+      <div 
+        *ngFor="let paciente of pacientes" 
+        class="col-md-6 col-lg-4 col-xl-3"
+      >
+        <div class="card paciente-card h-100 border-0 shadow-sm hover-lift">
+          <div class="card-body d-flex flex-column">
+            <div class="text-center mb-3">
+              <img
+                [src]="paciente.pac_fotoini || 'https://ui-avatars.com/api/?name=' + (paciente.pac_nombrecompleto || paciente.pac_pnombre + '+' + paciente.pac_papellido) + '&size=80&rounded=true&background=random'"
+                alt="Foto de {{ paciente.pac_nombrecompleto }}"
+                class="rounded-circle mb-3 paciente-foto"
+                onerror="this.src='https://ui-avatars.com/api/?name=' + (this.alt.split(' ')[2] || 'Paciente') + '&size=80&rounded=true&background=random'"
+              >
+              <h5 class="card-title text-primary mb-1">{{ paciente.pac_nombrecompleto }}</h5>
+              <p class="card-text text-muted small mb-2">
+                <i class="fas fa-id-card me-1"></i>{{ paciente.pac_identificacion }}
+              </p>
+              <span class="badge bg-success">
+                <i class="fas fa-user-injured me-1"></i>{{ paciente.pac_historiaclinica }}
+              </span>
+            </div>
+            
+            <div class="paciente-info flex-grow-1">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <small class="text-muted">
+                  <i class="fas fa-birthday-cake me-1"></i>{{ paciente.pac_fechanac   }}
+                </small>
+                <span 
+                  class="badge" 
+                  [ngClass]="{
+                    'bg-info': paciente.sex_codigo === 'MASCULINO' || paciente.sex_codigo === '1',
+                    'bg-danger': paciente.sex_codigo === 'FEMENINO' || paciente.sex_codigo === '2'
+                  }"
+                >
+                  <i 
+                    class="fas me-1" 
+                    [ngClass]="{
+                      'fa-mars': paciente.sex_codigo === 'MASCULINO' || paciente.sex_codigo === '1',
+                      'fa-venus': paciente.sex_codigo === 'FEMENINO' || paciente.sex_codigo === '2'
+                    }"
+                  ></i>
+                  {{ paciente.sex_codigo === 'MASCULINO' || paciente.sex_codigo === '1' ? 'Hombre' : 'Mujer' }}
+                </span>
+              </div>
+              
+              <div class="mb-2">
+                <small class="text-muted">
+                  <i class="fas fa-map-marker-alt me-1"></i>
+                  {{ paciente.provincia || 'No especificada' }}
+                </small>
+              </div>
+              
+              <div *ngIf="paciente.pac_telefono || paciente.pac_celular" class="mb-2">
+                <small class="text-muted">
+                  <i class="fas fa-phone me-1"></i>
+                  {{ paciente.pac_telefono || paciente.pac_celular }}
+                </small>
+              </div>
+              
+              <div *ngIf="paciente.pac_email">
+                <small class="text-muted">
+                  <i class="fas fa-envelope me-1"></i>
+                  {{ paciente.pac_email }}
+                </small>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card-footer bg-white border-0">
+            <div class="d-grid gap-2">
+              <button 
+                class="btn btn-sm btn-outline-primary" 
+                (click)="verDetalle(paciente)"
+              >
+                <i class="fas fa-eye me-1"></i> Ver Detalle
+              </button>
+              <button 
+                class="btn btn-sm btn-outline-secondary" 
+                (click)="editarPaciente(paciente)"
+              >
+                <i class="fas fa-edit me-1"></i> Editar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensaje si no hay pacientes -->
+    <div *ngIf="pacientes.length === 0 && !cargando" class="text-center py-5">
+      <i class="fas fa-user-injured fa-4x text-muted mb-3"></i>
+      <h4 class="text-muted">No se encontraron pacientes</h4>
+      <p class="text-muted">
+        <span *ngIf="filtro; else noHayPacientes">
+          No hay pacientes que coincidan con "{{ filtro }}".
+        </span>
+        <ng-template #noHayPacientes>
+          Aún no hay pacientes registrados.
+        </ng-template>
+      </p>
+    </div>
+  </div>
+
+  <!-- Paginación -->
+  <div *ngIf="!cargando && !error && pacientes.length > 0" class="mt-4">
+    <nav aria-label="Navegación de página">
+      <ul class="pagination justify-content-center mb-0">
+        <li class="page-item" [class.disabled]="paginaActual === 1">
+          <a class="page-link" href="javascript:void(0)" (click)="paginaAnterior()">
+            <i class="fas fa-chevron-left"></i>
+          </a>
+        </li>
+        
+        <li class="page-item active">
+          <span class="page-link">
+            Página {{ paginaActual }}
+          </span>
+        </li>
+        
+        <li class="page-item">
+          <a class="page-link" href="javascript:void(0)" (click)="paginaSiguiente()">
+            <i class="fas fa-chevron-right"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="text-center text-muted small mt-2">
+      Mostrando {{ pacientes.length }} pacientes
+    </div>
+  </div>
+</div>

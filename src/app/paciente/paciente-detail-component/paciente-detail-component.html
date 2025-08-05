@@ -1,0 +1,178 @@
+<div class="container mt-4">
+  <!-- Encabezado -->
+  <div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+      <h2>Detalle del Paciente</h2>
+      <div>
+        <button class="btn btn-secondary me-2" (click)="volver()">
+          <i class="fas fa-arrow-left me-1"></i>Volver
+        </button>
+        <button class="btn btn-primary" (click)="editarPaciente()" *ngIf="paciente">
+          <i class="fas fa-edit me-1"></i>Editar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando datos del paciente...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error && !cargando" class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+
+  <!-- Detalle del paciente -->
+  <div *ngIf="!cargando && !error && paciente" class="row">
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Foto</h5>
+        </div>
+        <div class="card-body text-center">
+          <img
+            src ="https://placehold.co/600x400.png"
+            alt="Foto del paciente"
+            class="img-fluid rounded mb-3"
+            style="max-width: 150px; height: auto;"
+           
+          >
+          <h4>{{ paciente.pac_nombrecompleto }}</h4>
+          <p class="text-muted">{{ paciente.pac_identificacion }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+          <h5 class="mb-0">Información Básica</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <strong>Historia Clínica:</strong> {{ paciente.pac_historiaclinica }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Tipo de Identificación:</strong> {{ paciente.tipide_codigo }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Primer Nombre:</strong> {{ paciente.pac_pnombre }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Segundo Nombre:</strong> {{ paciente.pac_snombre || 'N/A' }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Primer Apellido:</strong> {{ paciente.pac_papellido }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Segundo Apellido:</strong> {{ paciente.pac_sapellido || 'N/A' }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Sexo:</strong> {{ paciente.sex_codigo }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Lateralidad:</strong> {{ paciente.lat_codigo }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Fecha de Nacimiento:</strong> {{ paciente.pac_fechanac }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Edad:</strong> {{ paciente.pac_edadfecha }} años <!-- Asumiendo que este campo existe -->
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Estado Civil:</strong> {{ paciente.estciv_codigo }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Nacionalidad:</strong> {{ paciente.pac_nacionalidad }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>País:</strong> {{ paciente.pai_codigo }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aquí irían otras secciones como Contacto, Ubicación, Alertas, etc. -->
+      <!-- Puedes usar componentes hijos para cada sección -->
+
+      <div class="card mb-4">
+        <div class="card-header bg-warning text-dark">
+          <h5 class="mb-0">Alertas</h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="paciente.pac_alertas && paciente.pac_alertas.length > 0; else noAlertas">
+            <ul class="list-group">
+              <li 
+                *ngFor="let alerta of paciente.pac_alertas" 
+                class="list-group-item d-flex justify-content-between align-items-center"
+              >
+                {{ alerta.alepac_desc }}
+                <span 
+                  class="badge" 
+                  [ngClass]="{
+                    'bg-success': alerta.alepac_estado === 'ACTIVA',
+                    'bg-secondary': alerta.alepac_estado === 'INACTIVA'
+                  }"
+                >
+                  {{ alerta.alepac_estado }}
+                </span>
+              </li>
+            </ul>
+          </div>
+          <ng-template #noAlertas>
+            <p class="text-muted">No hay alertas registradas para este paciente.</p>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">Información Adicional</h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="paciente.pac_infoadicional && paciente.pac_infoadicional.length > 0; else noInfoAdic">
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered">
+                <thead class="table-light">
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Descripción</th>
+                    <th>Fecha</th>
+                    <th>Vigente</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let info of paciente.pac_infoadicional">
+                    <td>{{ info.tipadj_codigo }}</td>
+                    <td>{{ info.adjpac_desc }}</td>
+                    <td>{{ info.adjpac_fecharea }}</td>
+                    <td>
+                      <span 
+                        class="badge" 
+                        [ngClass]="{
+                          'bg-success': info.adjpac_vigente === 'SI',
+                          'bg-danger': info.adjpac_vigente === 'NO'
+                        }"
+                      >
+                        {{ info.adjpac_vigente }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <ng-template #noInfoAdic>
+            <p class="text-muted">No hay información adicional registrada para este paciente.</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { FrappeApiService } from '../../services/frappe-api.service';
 import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { Paciente } from '../../interfaces/interfaces';
 
 // Interfaz para el paciente
  

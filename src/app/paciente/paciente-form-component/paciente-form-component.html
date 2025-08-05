@@ -1,0 +1,592 @@
+<!-- src/app/paciente/components/paciente-form/paciente-form-component.html -->
+<div class="container-fluid py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h2 class="mb-0 text-primary">{{ isNew ? 'Nuevo Paciente' : 'Editar Paciente' }}</h2>
+          <p class="text-muted mb-0">Complete la información del paciente</p>
+        </div>
+        <button class="btn btn-outline-secondary" (click)="cancelar()">
+          <i class="fas fa-times me-1"></i>Cancelar
+        </button>
+      </div>
+      <hr class="my-3">
+    </div>
+  </div>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="visually-hidden">Procesando...</span>
+    </div>
+    <p class="mt-3 h5 text-primary">{{ isNew ? 'Creando paciente...' : 'Actualizando paciente...' }}</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error && !cargando" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="d-flex align-items-center">
+      <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+      <div>
+        <h5 class="alert-heading">¡Ups! Algo salió mal</h5>
+        <p class="mb-0">{{ error }}</p>
+      </div>
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="error=''"></button>
+  </div>
+
+  <!-- Formulario (visible cuando no está cargando y no hay error crítico) -->
+  <form *ngIf="!cargando && !error" (ngSubmit)="onSubmit()" #pacienteForm="ngForm" novalidate>
+    <div class="row g-4">
+      <!-- Columna Izquierda -->
+      <div class="col-md-6">
+        <!-- Sección: Datos Básicos -->
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-header bg-gradient-primary text-white py-3">
+            <h5 class="mb-0 d-flex align-items-center">
+              <i class="fas fa-user me-2"></i>
+              Datos Básicos
+            </h5>
+          </div>
+          <div class="card-body">
+            <fieldset>
+              <legend class="visually-hidden">Información Personal del Paciente</legend>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="tipide_codigo" class="form-label d-flex align-items-center">
+                    Tipo de Identificación
+                    <span class="text-danger ms-1" title="Campo obligatorio">*</span>
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-id-card"></i>
+                    </span>
+                    <select
+                      class="form-select"
+                      id="tipide_codigo"
+                      name="tipide_codigo"
+                      [(ngModel)]="paciente.tipide_codigo"
+                      required
+                    >
+                      <option value="">Seleccione...</option>
+                      <option *ngFor="let tipo of tiposIdentificacion" [value]="tipo.name">
+                        {{ tipo.tipide_desc }}
+                      </option>
+                    </select>
+                  </div>
+                  <!-- Mensaje de error de validación (ejemplo simple) -->
+                  <!-- <div class="invalid-feedback">Por favor, seleccione un tipo.</div> -->
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="pac_identificacion" class="form-label d-flex align-items-center">
+                    Identificación
+                    <span class="text-danger ms-1" title="Campo obligatorio">*</span>
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-fingerprint"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pac_identificacion"
+                      name="pac_identificacion"
+                      [(ngModel)]="paciente.pac_identificacion"
+                      (ngModelChange)="onIdentificacionChange()"
+                      required
+                      minlength="6"
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="pac_pnombre" class="form-label d-flex align-items-center">
+                    Primer Nombre
+                    <span class="text-danger ms-1" title="Campo obligatorio">*</span>
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-user-tag"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pac_pnombre"
+                      name="pac_pnombre"
+                      [(ngModel)]="paciente.pac_pnombre"
+                      required
+                      minlength="2"
+                    >
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="pac_snombre" class="form-label">Segundo Nombre</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-user-tag"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pac_snombre"
+                      name="pac_snombre"
+                      [(ngModel)]="paciente.pac_snombre"
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="pac_papellido" class="form-label d-flex align-items-center">
+                    Primer Apellido
+                    <span class="text-danger ms-1" title="Campo obligatorio">*</span>
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-user-tag"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pac_papellido"
+                      name="pac_papellido"
+                      [(ngModel)]="paciente.pac_papellido"
+                      required
+                      minlength="2"
+                    >
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="pac_sapellido" class="form-label">Segundo Apellido</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-user-tag"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pac_sapellido"
+                      name="pac_sapellido"
+                      [(ngModel)]="paciente.pac_sapellido"
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="pac_nombrecompleto" class="form-label">Nombre Completo</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light">
+                    <i class="fas fa-user-circle"></i>
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="pac_nombrecompleto"
+                    name="pac_nombrecompleto"
+                    [(ngModel)]="paciente.pac_nombrecompleto"
+                    readonly
+                  >
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="sex_codigo" class="form-label d-flex align-items-center">
+                    Sexo
+                    <span class="text-danger ms-1" title="Campo obligatorio">*</span>
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-venus-mars"></i>
+                    </span>
+                    <select
+                      class="form-select"
+                      id="sex_codigo"
+                      name="sex_codigo"
+                      [(ngModel)]="paciente.sex_codigo"
+                      required
+                    >
+                      <option value="">Seleccione...</option>
+                      <option *ngFor="let sexo of sexos" [value]="sexo.name">
+                        {{ sexo.sex_desc }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="lat_codigo" class="form-label d-flex align-items-center">
+                    Lateralidad
+                    <span class="text-danger ms-1" title="Campo obligatorio">*</span>
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-hand-point-right"></i>
+                    </span>
+                    <select
+                      class="form-select"
+                      id="lat_codigo"
+                      name="lat_codigo"
+                      [(ngModel)]="paciente.lat_codigo"
+                      required
+                    >
+                      <option value="">Seleccione...</option>
+                      <option *ngFor="let lat of lateralidades" [value]="lat.lat_codigo">
+                        {{ lat.lat_desc }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="estciv_codigo" class="form-label">Estado Civil</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-ring"></i>
+                    </span>
+                    <select
+                      class="form-select"
+                      id="estciv_codigo"
+                      name="estciv_codigo"
+                      [(ngModel)]="paciente.estciv_codigo"
+                    >
+                      <option value="">Seleccione...</option>
+                      <option *ngFor="let estado of estadosCiviles" [value]="estado.name">
+                        {{ estado.estciv_desc }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="pac_fechanac" class="form-label d-flex align-items-center">
+                    Fecha de Nacimiento
+                    <span class="text-danger ms-1" title="Campo obligatorio">*</span>
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-birthday-cake"></i>
+                    </span>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="pac_fechanac"
+                      name="pac_fechanac"
+                      [(ngModel)]="paciente.pac_fechanac"
+                      required
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="pac_nacionalidad" class="form-label">Nacionalidad</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-flag"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pac_nacionalidad"
+                      name="pac_nacionalidad"
+                      [(ngModel)]="paciente.pac_nacionalidad"
+                    >
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="pai_codigo" class="form-label">País</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-globe-americas"></i>
+                    </span>
+                    <select
+                      class="form-select"
+                      id="pai_codigo"
+                      name="pai_codigo"
+                      [(ngModel)]="paciente.pai_codigo"
+                    >
+                      <option value="">Seleccione...</option>
+                      <option *ngFor="let pais of paises" [value]="pais.name">
+                        {{ pais.pai_desc }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+
+        <!-- Sección: Ubicación Geográfica -->
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-header bg-gradient-info text-white py-3">
+            <h5 class="mb-0 d-flex align-items-center">
+              <i class="fas fa-map-marked-alt me-2"></i>
+              Ubicación Geográfica
+            </h5>
+          </div>
+          <div class="card-body">
+            <fieldset>
+              <legend class="visually-hidden">Ubicación del Paciente</legend>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="provincia" class="form-label">Provincia</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-city"></i>
+                    </span>
+                    <select
+                      class="form-select"
+                      id="provincia"
+                      name="provincia"
+                      [(ngModel)]="paciente.provincia"
+                      (ngModelChange)="onProvinciaChange()"
+                    >
+                      <option value="">Seleccione...</option>
+                      <option *ngFor="let prov of provincias" [value]="prov">
+                        {{ prov }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="canton" class="form-label">Cantón</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-building"></i>
+                    </span>
+                    <select
+                      class="form-select"
+                      id="canton"
+                      name="canton"
+                      [(ngModel)]="paciente.canton"
+                      (ngModelChange)="onCantonChange()"
+                      [disabled]="!paciente.provincia"
+                    >
+                      <option value="">Seleccione una provincia primero</option>
+                      <option *ngFor="let cant of cantones" [value]="cant">
+                        {{ cant }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="parroquia" class="form-label">Parroquia</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light">
+                      <i class="fas fa-home"></i>
+                    </span>
+                    <select
+                      class="form-select"
+                      id="parroquia"
+                      name="parroquia"
+                      [(ngModel)]="paciente.parroquia"
+                      (ngModelChange)="onParroquiaChange()"
+                      [disabled]="!paciente.canton"
+                    >
+                      <option value="">Seleccione un cantón primero</option>
+                      <option *ngFor="let parr of parroquias" [value]="parr">
+                        {{ parr }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Puedes añadir campos para latitud, longitud si son relevantes -->
+                <!--
+                <div class="col-md-3 mb-3">
+                  <label for="latitude" class="form-label">Latitud</label>
+                  <input type="text" class="form-control" id="latitude" name="latitude" [(ngModel)]="paciente.latitude">
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label for="longitude" class="form-label">Longitud</label>
+                  <input type="text" class="form-control" id="longitude" name="longitude" [(ngModel)]="paciente.longitude">
+                </div>
+                -->
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna Derecha -->
+      <div class="col-md-6">
+        <!-- Sección: Contacto -->
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-header bg-gradient-secondary text-white py-3">
+            <h5 class="mb-0 d-flex align-items-center">
+              <i class="fas fa-address-book me-2"></i>
+              Información de Contacto
+            </h5>
+          </div>
+          <div class="card-body">
+            <fieldset>
+              <legend class="visually-hidden">Datos de Contacto del Paciente</legend>
+              
+              <div class="mb-3">
+                <label for="pac_telefono" class="form-label">Teléfono</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light">
+                    <i class="fas fa-phone"></i>
+                  </span>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="pac_telefono"
+                    name="pac_telefono"
+                    [(ngModel)]="paciente.pac_telefono"
+                  >
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="pac_celular" class="form-label">Celular</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light">
+                    <i class="fas fa-mobile-alt"></i>
+                  </span>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="pac_celular"
+                    name="pac_celular"
+                    [(ngModel)]="paciente.pac_celular"
+                  >
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="pac_email" class="form-label">Email</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light">
+                    <i class="fas fa-envelope"></i>
+                  </span>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="pac_email"
+                    name="pac_email"
+                    [(ngModel)]="paciente.pac_email"
+                  >
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="pac_lladireccion" class="form-label">Dirección</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light">
+                    <i class="fas fa-map-marker-alt"></i>
+                  </span>
+                  <textarea
+                    class="form-control"
+                    id="pac_lladireccion"
+                    name="pac_lladireccion"
+                    rows="2"
+                    [(ngModel)]="paciente.pac_lladireccion"
+                  ></textarea>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+
+        <!-- Sección: Información Adicional -->
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-header bg-gradient-success text-white py-3">
+            <h5 class="mb-0 d-flex align-items-center">
+              <i class="fas fa-file-medical me-2"></i>
+              Información Adicional
+            </h5>
+          </div>
+          <div class="card-body">
+            <fieldset>
+              <legend class="visually-hidden">Datos Adicionales del Paciente</legend>
+              
+              <div class="mb-3">
+                <label for="pac_narchivo" class="form-label">N° de Archivo</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light">
+                    <i class="fas fa-folder"></i>
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="pac_narchivo"
+                    name="pac_narchivo"
+                  
+                  >
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="pac_codigoalt" class="form-label">Código Alterno</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light">
+                    <i class="fas fa-barcode"></i>
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="pac_codigoalt"
+                    name="pac_codigoalt"
+                  
+                  >
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="pac_alertafija" class="form-label">Alerta Fija</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light">
+                    <i class="fas fa-exclamation-triangle"></i>
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="pac_alertafija"
+                    name="pac_alertafija"
+                   
+                  >
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">
+            <i class="fas fa-times me-1"></i>Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary btn-lg px-4" [disabled]="cargando || pacienteForm.invalid">
+            <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            <i *ngIf="!cargando" class="fas fa-save me-1"></i>
+            {{ isNew ? 'Crear Paciente' : 'Actualizar Paciente' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

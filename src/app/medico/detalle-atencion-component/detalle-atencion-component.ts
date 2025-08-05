@@ -15,6 +15,7 @@ import { DetalleAtencionTratamiento } from './detalle-atencion-tratamiento/detal
 import { DetalleAtencionConsentimiento } from './detalle-atencion-consentimiento/detalle-atencion-consentimiento';
 import { DetalleAtencionProcedimiento } from './detalle-atencion-procedimiento/detalle-atencion-procedimiento';
 import { DetalleAtencionCertificado } from './detalle-atencion-certificado/detalle-atencion-certificado';
+import { FrappeApiService } from '../../services/frappe-api.service';
 
 @Component({
   selector: 'app-detalle-atencion',
@@ -35,9 +36,7 @@ import { DetalleAtencionCertificado } from './detalle-atencion-certificado/detal
     DetalleAtencionTratamiento,
     DetalleAtencionConsentimiento,
     DetalleAtencionProcedimiento,
-    DetalleAtencionCertificado 
-    // Importamos los componentes hijos
-    // (Los declararemos más abajo)
+    DetalleAtencionCertificado
   ],
   templateUrl: './detalle-atencion-component.html',
   styleUrls: ['./detalle-atencion-component.css']
@@ -76,7 +75,10 @@ export class DetalleAtencionComponent implements OnInit {
     { id: 'certificado', label: 'Certificado Médico', icon: 'M10 2L3 7v11a2 2 0 002 2h4v-6h2v6h4a2 2 0 002-2V7l-7-5z' }
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute,
+ private frappeApiService: FrappeApiService
+
+  ) { }
 
   ngOnInit(): void {
     // Si se pasa el ate_id como parámetro de ruta, lo usamos

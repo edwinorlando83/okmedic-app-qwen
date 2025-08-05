@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgFor, NgIf, DatePipe, TitleCasePipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
- 
+
 import { finalize } from 'rxjs/operators';
 import { FrappeApiService } from '../../services/frappe-api.service';
 import { MessageUtilsService } from '../../utils/message-utils.service';
@@ -34,9 +34,9 @@ interface AtencionMedica {
 @Component({
   selector: 'app-atencion-medica',
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule, DatePipe, TitleCasePipe,NgClass,
-     FechaCompletaPipe,  
-    HoraFormatoPipe 
+  imports: [NgFor, NgIf, FormsModule, DatePipe, TitleCasePipe, NgClass,
+    FechaCompletaPipe,
+    HoraFormatoPipe
   ],
   templateUrl: './atencion-medica-component.html',
   styleUrls: ['./atencion-medica-component.css']
@@ -46,7 +46,7 @@ export class AtencionMedicaComponent implements OnInit {
   atencionesFiltradas: any[] = [];
   cargando = false;
   error = '';
-  
+
   // Paginación
   paginaActual = 1;
   registrosPorPagina = 20;
@@ -73,7 +73,7 @@ export class AtencionMedicaComponent implements OnInit {
     private frappeApiService: FrappeApiService,
     private messageUtils: MessageUtilsService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.inicializarFechas();
@@ -85,39 +85,39 @@ export class AtencionMedicaComponent implements OnInit {
     const hoy = new Date();
     const primerDiaMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
     const ultimoDiaMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0);
-    
+
     this.filtros.fechaDesde = primerDiaMes.toISOString().split('T')[0];
     this.filtros.fechaHasta = ultimoDiaMes.toISOString().split('T')[0];
   }
 
   private cargarCatalogos(): void {
     // Cargar lugares de atención
-  this.frappeApiService.list<{ name: string; lugate_desc: string }>('OKM_LUGARATENCION', {
-    fields: ['name', 'lugate_desc'],
-    limitPageLength: 1000
-  }).subscribe({
-    next: (lugares) => { // <- 'lugares' es de tipo { name: string; lugate_desc: string; }[]
-      this.lugaresAtencion = lugares || []; // <- Asignar directamente el arreglo
-    },
-    error: (err) => {
-      console.error('Error al cargar lugares de atención:', err);
-      this.messageUtils.mostrarErrorDeFrappe('Error al cargar lugares de atención', err);
-    }
-  });
+    this.frappeApiService.list<{ name: string; lugate_desc: string }>('OKM_LUGARATENCION', {
+      fields: ['name', 'lugate_desc'],
+      limitPageLength: 1000
+    }).subscribe({
+      next: (lugares) => { // <- 'lugares' es de tipo { name: string; lugate_desc: string; }[]
+        this.lugaresAtencion = lugares || []; // <- Asignar directamente el arreglo
+      },
+      error: (err) => {
+        console.error('Error al cargar lugares de atención:', err);
+        this.messageUtils.mostrarErrorDeFrappe('Error al cargar lugares de atención', err);
+      }
+    });
 
     // Cargar cronologías
     this.frappeApiService.list<{ name: string; cro_desc: string }>('OKM_CRONOLOGIA', {
-    fields: ['name', 'cro_desc'],
-    limitPageLength: 1000
-  }).subscribe({
-    next: (cronos) => { // <- 'cronos' es de tipo { name: string; cro_desc: string; }[]
-      this.cronologias = cronos || []; // <- Asignar directamente el arreglo
-    },
-    error: (err) => {
-      console.error('Error al cargar cronologías:', err);
-      this.messageUtils.mostrarErrorDeFrappe('Error al cargar cronologías', err);
-    }
-  });
+      fields: ['name', 'cro_desc'],
+      limitPageLength: 1000
+    }).subscribe({
+      next: (cronos) => { // <- 'cronos' es de tipo { name: string; cro_desc: string; }[]
+        this.cronologias = cronos || []; // <- Asignar directamente el arreglo
+      },
+      error: (err) => {
+        console.error('Error al cargar cronologías:', err);
+        this.messageUtils.mostrarErrorDeFrappe('Error al cargar cronologías', err);
+      }
+    });
   }
 
   cargarAtenciones(): void {
@@ -126,7 +126,7 @@ export class AtencionMedicaComponent implements OnInit {
 
     // Construir filtros para la API
     let filtrosApi: any[] = [];
-    
+
     // Filtro por rango de fechas
     if (this.filtros.fechaDesde) {
       filtrosApi.push(['ate_fechaini', '>=', this.filtros.fechaDesde]);
@@ -194,25 +194,25 @@ export class AtencionMedicaComponent implements OnInit {
     };
 
     this.frappeApiService.list<AtencionMedica>('OKM_ATENCION', options)
-  .pipe(finalize(() => this.cargando = false))
-  .subscribe({
-    next: (response) => {  
-     
-      this.atenciones = response || [];  
-      this.atencionesFiltradas = [...this.atenciones];
-       console.log('Atenciones cargadas:', this.atencionesFiltradas );
-      // Nota: Para la paginación real, necesitarías el total del servidor
-      this.totalRegistros = this.atenciones.length;
-      this.totalPaginas = Math.ceil(this.totalRegistros / this.registrosPorPagina);
-    },
-    error: (err) => {
-      console.error('Error al cargar atenciones:', err);
+      .pipe(finalize(() => this.cargando = false))
+      .subscribe({
+        next: (response) => {
+
+          this.atenciones = response || [];
+          this.atencionesFiltradas = [...this.atenciones];
+          console.log('Atenciones cargadas:', this.atencionesFiltradas);
+          // Nota: Para la paginación real, necesitarías el total del servidor
+          this.totalRegistros = this.atenciones.length;
+          this.totalPaginas = Math.ceil(this.totalRegistros / this.registrosPorPagina);
+        },
+        error: (err) => {
+          console.error('Error al cargar atenciones:', err);
           this.error = 'Error al cargar las atenciones médicas.';
           this.messageUtils.mostrarErrorDeFrappe('Error al cargar atenciones', err);
-    }
-  });
+        }
+      });
 
-    
+
   }
 
   aplicarFiltros(): void {
@@ -244,15 +244,13 @@ export class AtencionMedicaComponent implements OnInit {
   }
 
   verDetalle(atencion: AtencionMedica): void {
-    console.log('Ver detalle de atención:', atencion.name);
-    // Aquí puedes navegar a una página de detalle o abrir un modal
-    // this.router.navigate(['/atencion-medica', atencion.name]);
-    alert(`Funcionalidad para ver detalle de ${atencion.name} aún no implementada.`);
+
+    this.router.navigate(['atencion-medica', atencion.name]);
   }
 
   // Métodos auxiliares para formateo
   formatearSexo(sexoCodigo: string): string {
-    switch(sexoCodigo) {
+    switch (sexoCodigo) {
       case '1': return 'Hombre';
       case '2': return 'Mujer';
       default: return 'No especificado';
@@ -260,7 +258,7 @@ export class AtencionMedicaComponent implements OnInit {
   }
 
   formatearEstado(estadoCodigo: string): string {
-    switch(estadoCodigo) {
+    switch (estadoCodigo) {
       case 'E': return 'En Enfermería';
       case 'F': return 'Finalizada';
       case 'I': return 'Iniciada';
@@ -270,7 +268,7 @@ export class AtencionMedicaComponent implements OnInit {
   }
 
   formatearBadgeClase(estadoCodigo: string): string {
-    switch(estadoCodigo) {
+    switch (estadoCodigo) {
       case 'E': return 'badge-warning';
       case 'F': return 'badge-success';
       case 'I': return 'badge-primary';
