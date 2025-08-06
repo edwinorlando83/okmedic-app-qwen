@@ -1,14 +1,5 @@
 /* src/app/paciente/components/paciente-list/paciente-list.component.css */
-.card {
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
-}
+/* Los estilos de .card, .badge, .input-group-text, .form-control:focus, .btn-primary y .alert-danger se han movido a styles.css */
 
 .paciente-card {
   border-radius: 15px;
@@ -40,43 +31,13 @@
   font-size: 0.9rem;
 }
 
-.badge {
-  font-weight: 600;
-  padding: 0.5em 0.8em;
-  border-radius: 20px;
+.paciente-info small {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
 }
 
-.input-group-text {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-  color: white;
-}
-
-.form-control:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.25rem rgba(0, 119, 182, 0.25);
-}
-
-.btn-primary {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-}
-
-.btn-primary:hover {
-  background-color: var(--acento-fuerte);
-  border-color: var(--acento-fuerte);
-}
-
-.alert-danger {
-  border-radius: 12px;
-  border: none;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-}
-
-.alert-danger .alert-heading {
-  color: #dc3545;
-}
-
+/* Estilos de paginación específicos */
 .page-link {
   color: var(--primary-color);
   border-radius: 8px !important;
@@ -100,34 +61,10 @@
   border-color: #dee2e6;
 }
 
-.hover-lift:hover {
-  transform: translateY(-5px);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.paciente-info small {
-  display: block;
-  margin-bottom: 0.25rem;
-  font-size: 0.85rem;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
-  .paciente-foto {
-    width: 70px;
-    height: 70px;
-  }
-  
-  .card-title {
-    font-size: 1rem;
-  }
-  
-  .paciente-info small {
-    font-size: 0.8rem;
-  }
-  
-  .btn-sm {
-    font-size: 0.8rem;
-    padding: 0.25rem 0.5rem;
-  }
+  .paciente-foto { width: 70px; height: 70px; }
+  .card-title { font-size: 1rem; }
+  .paciente-info small { font-size: 0.8rem; }
+  .btn-sm { font-size: 0.8rem; padding: 0.25rem 0.5rem; }
 }

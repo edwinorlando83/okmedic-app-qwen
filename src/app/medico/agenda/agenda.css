@@ -1,32 +1,5 @@
-.card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.input-group-text {
-  background-color: var(--light-color);
-  border-color: var(--border-color);
-}
-
-.form-control:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.25rem rgba(0, 119, 182, 0.25);
-}
-
-.btn-primary {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-}
-
-.btn-primary:hover {
-  background-color: var(--acento-fuerte);
-  border-color: var(--acento-fuerte);
-}
-
+/* src/app/agenda/agenda.component.css */
+/* Los estilos de .card, .input-group-text, .form-control:focus, .btn-primary se han movido a styles.css */
 
 .cita-card {
   border-radius: 12px;
@@ -110,28 +83,11 @@
   transform: none;
 }
 
-/* Colores específicos para estados de citas (ejemplos, puedes ajustar según tus necesidades) */
-.estado-creada {
-  background: linear-gradient(135deg, #4CAF50, #81C784);
-  color: white;
-}
+.estado-creada { background: linear-gradient(135deg, #4CAF50, #81C784); color: white; }
+.estado-reservada { background: linear-gradient(135deg, #2196F3, #64B5F6); color: white; }
+.estado-bloqueada { background: linear-gradient(135deg, #9E9E9E, #E0E0E0); color: #212529; }
+.estado-cancelada { background: linear-gradient(135deg, #F44336, #EF9A9A); color: white; }
 
-.estado-reservada {
-  background: linear-gradient(135deg, #2196F3, #64B5F6);
-  color: white;
-}
-
-.estado-bloqueada {
-  background: linear-gradient(135deg, #9E9E9E, #E0E0E0);
-  color: #212529;
-}
-
-.estado-cancelada {
-  background: linear-gradient(135deg, #F44336, #EF9A9A);
-  color: white;
-}
-
-/* Alertas mejoradas */
 .alert-atencion {
   border-radius: 12px;
   border: none;
@@ -142,14 +98,12 @@
   font-size: 1.5rem;
 }
 
-/* Spinner de carga mejorado */
 .spinner-border-custom {
   width: 3rem;
   height: 3rem;
   border-width: 0.25em;
 }
 
-/* Tarjeta de resumen de agenda */
 .agenda-summary-card {
   border-radius: 12px;
   border: none;
@@ -171,16 +125,7 @@
 
 /* Responsive para cards */
 @media (max-width: 768px) {
-  .cita-time {
-    font-size: 1.1rem;
-  }
-  
-  .cita-info {
-    font-size: 0.85rem;
-  }
-  
-  .cita-assign-btn {
-    font-size: 0.85rem;
-    padding: 0.5rem;
-  }
+  .cita-time { font-size: 1.1rem; }
+  .cita-info { font-size: 0.85rem; }
+  .cita-assign-btn { font-size: 0.85rem; padding: 0.5rem; }
 }

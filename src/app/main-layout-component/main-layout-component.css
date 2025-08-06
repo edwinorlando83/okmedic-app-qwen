@@ -1,18 +1,9 @@
 /* main-layout-component.css */
 
-/* --- Estilos del Body --- */
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color-dark);
-  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  transition: background-color 0.3s, color 0.3s;
-  padding-top: 65px; /* Compensar navbar fixed */
-}
-
 /* --- Navbar --- */
 .navbar {
   height: 65px;
-  z-index: 1030; /* Valor por defecto de Bootstrap para navbar fijo */
+  z-index: 1030;
 }
 
 .navbar-brand-custom {
@@ -23,9 +14,9 @@ body {
 
 /* --- Sidebar Refactorizado --- */
 .sidebar {
-  height: calc(100vh - 65px); /* Altura completa menos el navbar */
+  height: calc(100vh - 65px);
   position: fixed;
-  top: 65px; /* Debajo del navbar */
+  top: 65px;
   left: 0;
   background: var(--light-color);
   border-right: 1px solid var(--border-color);
@@ -40,24 +31,24 @@ body {
 }
 
 .sidebar-closed {
-  width: 70px; /* Tamaño un poco más grande para iconos */
+  width: 70px;
   overflow: hidden;
 }
 
 .sidebar .nav-link {
-  padding: 1rem 1.25rem; /* Ajuste del padding */
+  padding: 1rem 1.25rem;
   color: var(--text-color-dark);
   font-weight: 500;
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 1.5rem; /* Espaciado entre icono y texto */
+  gap: 1.5rem;
   transition: all 0.2s ease;
   border-left: 5px solid transparent;
 }
 
 .sidebar .nav-link i {
-  width: 20px; /* Ancho fijo para alinear los iconos */
+  width: 20px;
   text-align: center;
 }
 
@@ -72,13 +63,13 @@ body {
   border-left-color: var(--primary-color);
 }
 .sidebar .nav-link.active:hover {
-  color: white; /* Mantener el color blanco en hover */
+  color: white;
 }
 
 /* --- Contenido Principal --- */
 main {
   transition: margin-left 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  margin-left: 70px; 
+  margin-left: 70px;
 }
 
 .content-expanded {
@@ -90,7 +81,7 @@ main {
 }
 
 /* --- Responsive --- */
-@media (max-width: 992px) { /* Ajuste para tablets */
+@media (max-width: 992px) {
   .sidebar-open {
     width: 220px;
   }

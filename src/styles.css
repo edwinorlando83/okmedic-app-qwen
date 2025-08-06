@@ -1,6 +1,6 @@
 /* src/styles.css */
 
-/* --- Variables de Color Mejoradas --- */
+/* --- Variables de Color y Diseño Mejoradas --- */
 :root {
   --primary-color: #0077b6;
   --secondary-color: #00b4d8;
@@ -10,13 +10,22 @@
   --success-color: #28a745;
   --warning-color: #ffc107;
   --danger-color: #dc3545;
-  --info-color: #17a2b8; /* Nuevo color informativo */
+  --info-color: #17a2b8;
   --border-color: #e9ecef;
   --shadow-color: rgba(0, 0, 0, 0.08);
   --text-color-dark: #343a40;
   --text-color-light: #6c757d;
   --bg-color: #f8f9fa;
   --acento-fuerte: #005577;
+  --card-radius: 12px;
+  --input-radius: 10px;
+  --btn-radius: 10px;
+  
+  /* Gradientes */
+  --gradient-primary: linear-gradient(120deg, #0077b6, #005577);
+  --gradient-info: linear-gradient(120deg, #17a2b8, #138496);
+  --gradient-secondary: linear-gradient(120deg, #6c757d, #5a6268);
+  --gradient-success: linear-gradient(120deg, #28a745, #218838);
 }
 
 /* --- Tipografía y Estilos Generales --- */
@@ -42,16 +51,12 @@ a:hover {
   color: var(--acento-fuerte);
 }
 
-/* --- Clases de Utilidad Mejoradas --- */
-.container-fluid {
-  padding-left: 2rem;
-  padding-right: 2rem;
-}
+/* --- Clases de Utilidad y Componentes Globales --- */
 
 /* Cards mejorados */
 .card {
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: var(--card-radius);
   box-shadow: 0 4px 20px var(--shadow-color);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   background-color: var(--light-color);
@@ -66,13 +71,20 @@ a:hover {
   background-color: var(--bg-color);
   border-bottom: 1px solid var(--border-color);
   padding: 1rem 1.5rem;
-  border-radius: 12px 12px 0 0;
+  border-radius: var(--card-radius) var(--card-radius) 0 0;
+  font-weight: 600;
+}
+
+.card-footer {
+  border-top: 1px solid var(--border-color);
+  border-bottom-left-radius: var(--card-radius);
+  border-bottom-right-radius: var(--card-radius);
 }
 
 /* Botones con un diseño más moderno */
 .btn {
   font-weight: 600;
-  border-radius: 10px;
+  border-radius: var(--btn-radius);
   padding: 0.75rem 1.5rem;
   transition: all 0.2s ease;
 }
@@ -102,7 +114,7 @@ a:hover {
 
 /* Inputs y Selects */
 .form-control, .form-select {
-  border-radius: 10px;
+  border-radius: var(--input-radius);
   border: 1px solid var(--border-color);
   padding: 0.75rem 1rem;
   font-size: 1rem;
@@ -112,6 +124,25 @@ a:hover {
 .form-control:focus, .form-select:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.15);
+}
+
+/* Labels de formulario */
+.form-label {
+  font-weight: 500;
+  color: var(--text-color-dark);
+  margin-bottom: 0.5rem;
+}
+
+/* Grupos de inputs */
+.input-group {
+  border-radius: var(--input-radius);
+  overflow: hidden;
+}
+
+.input-group-text {
+  background-color: var(--bg-color);
+  border-color: var(--border-color);
+  color: var(--text-color-light);
 }
 
 /* Pestañas (Tabs) */
@@ -141,4 +172,57 @@ a:hover {
   font-weight: 600;
 }
 
- 
+/* Badges */
+.badge {
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 20px;
+}
+
+.badge-primary { background-color: var(--primary-color) !important; color: white !important; }
+.badge-secondary { background-color: var(--text-color-light) !important; color: white !important; }
+.badge-success { background-color: var(--success-color) !important; color: white !important; }
+.badge-warning { background-color: var(--warning-color) !important; color: var(--dark-color) !important; }
+.badge-info { background-color: var(--info-color) !important; color: white !important; }
+
+/* Alertas */
+.alert {
+  border-radius: var(--card-radius);
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.alert-danger .alert-heading {
+  color: var(--danger-color);
+}
+
+/* Clases de utilidades */
+.hover-lift:hover {
+  transform: translateY(-5px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradientes para encabezados */
+.bg-gradient-primary { background: var(--gradient-primary) !important; color: white; }
+.bg-gradient-info { background: var(--gradient-info) !important; color: white; }
+.bg-gradient-secondary { background: var(--gradient-secondary) !important; color: white; }
+.bg-gradient-success { background: var(--gradient-success) !important; color: white; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card { margin-bottom: 1rem; }
+  .form-label { font-size: 0.9rem; }
+  .btn { font-size: 0.9rem; padding: 0.375rem 0.75rem; }
+}
+
+.profesional-foto {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+}
