@@ -1,34 +1,41 @@
-<!-- src/app/layouts/main-layout/main-layout.component.html -->
 <div class="app-container d-flex flex-column min-vh-100">
-  <!-- Navbar Común (Fijo en la parte superior) -->
-  <header class="navbar navbar-expand-lg navbar-light bg-white shadow-sm border-bottom fixed-top">
-    <div class="container-fluid">
-      <button class="btn btn-outline-primary me-2" (click)="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-      </button>
+  
+  <header class="navbar navbar-expand-lg navbar-light bg-light shadow-sm border-bottom fixed-top px-4">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
       
       <div class="d-flex align-items-center">
+        <button class="btn btn-outline-secondary me-3 d-lg-none" (click)="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+        <span class="h5 mb-0 navbar-brand-custom">OK-MEDIC</span>
+      </div>
+      
+      <div class="d-flex align-items-center">
+        </div>
+
+      <div class="d-flex align-items-center">
+        <div class="d-flex flex-column text-end me-3 d-none d-md-block">
+          <span class="fw-bold text-dark">{{ getUser() }}</span>
+          <span class="badge rounded-pill bg-primary mt-1">{{ getRol() }}</span>
+        </div>
         <img
           [src]="getFotoProfesional()"
           alt="Foto Profesional"
-          class="rounded me-3"
-          style="width: 40px; height: 40px; object-fit: cover;"
+          class="rounded-circle me-3"
+          style="width: 45px; height: 45px; object-fit: cover;"
           onerror="this.src='https://tudoctor.okmedic.online/files/tudoctorok.jpeg'"
         />
-        <span class="h5 mb-0 navbar-brand-custom">OK-MEDIC</span>
-      </div>
-
-      <div class="d-flex align-items-center ms-auto">
-     
-        <span class="text-muted me-3 small">Hola, <strong>{{ getUser() }}</strong></span>
-        <button (click)="logout()" class="btn btn-outline-danger btn-sm">Cerrar sesión</button>
+        <button (click)="logout()" class="btn btn-outline-danger d-none d-sm-block">
+          <i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión
+        </button>
+        <button (click)="logout()" class="btn btn-outline-danger btn-sm d-block d-sm-none">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- Contenedor principal debajo del navbar fijo -->
-  <div class="d-flex flex-grow-1" style="margin-top: 56px;">
-    <!-- Sidebar (Altura completa menos el navbar) -->
+  <div class="d-flex flex-grow-1" style="margin-top: 65px;">
     <div [ngClass]="{
       'sidebar': true,
       'sidebar-open': isSidebarOpen,
@@ -42,14 +49,13 @@
             [routerLink]="item.route"
             routerLinkActive="active"
           >
-            <i [class]="item.icon + ' me-2'"></i>
-            <span *ngIf="isSidebarOpen">{{ item.name }}</span>
+            <i [class]="item.icon + ' me-3 fs-5'"></i>
+            <span *ngIf="isSidebarOpen" class="fw-medium">{{ item.name }}</span>
           </a>
         </nav>
       </div>
     </div>
 
-    <!-- Contenido Principal -->
     <main 
       class="flex-grow-1 py-4"
       [ngClass]="{
@@ -63,8 +69,7 @@
     </main>
   </div>
 
-  <!-- Footer Común (Pegado al final) -->
-  <footer class="py-3 text-center text-muted small border-top bg-white mt-auto">
+  <footer class="py-3 text-center text-muted small border-top bg-light mt-auto">
     <div class="container-fluid">
       <p class="mb-0">© 2025 OK-MEDIC. Sistema de Gestión Médica.</p>
     </div>
