@@ -1,0 +1,493 @@
+<div class="modal-header bg-primary text-white">
+  <h5 class="modal-title">
+    {{ tituloModal }}
+  </h5>
+  <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+  <form #antForm="ngForm">
+    <!-- Formulario para Antecedentes Obstétricos -->
+    <div *ngIf="tipoAntecedente === 'antObstetrico'">
+      <div class="row g-2">
+        <!-- Sección: Datos Personales y Embarazo -->
+        <div class="col-md-12">
+          <h6 class="section-title">Datos Personales y Embarazo</h6>
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_peso" class="form-label">Peso (kg)</label>
+          <input
+            type="number"
+            id="antobs_peso"
+            name="antobs_peso"
+            class="form-control"
+            [(ngModel)]="antObstetrico.antobs_peso"
+            step="0.1"
+            min="0"
+          >
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_embmolar" class="form-label">Embarazo Molar</label>
+          <select
+            id="antobs_embmolar"
+            name="antobs_embmolar"
+            class="form-select"
+            [(ngModel)]="antObstetrico.antobs_embmolar"
+          >
+            <option value="">Seleccione</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_embectopico" class="form-label">Embarazo Ectópico</label>
+          <select
+            id="antobs_embectopico"
+            name="antobs_embectopico"
+            class="form-select"
+            [(ngModel)]="antObstetrico.antobs_embectopico"
+          >
+            <option value="">Seleccione</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_vidasexactiva" class="form-label">Vida Sexual Activa</label>
+          <select
+            id="antobs_vidasexactiva"
+            name="antobs_vidasexactiva"
+            class="form-select"
+            [(ngModel)]="antObstetrico.antobs_vidasexactiva"
+          >
+            <option value="">Seleccione</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_numembarazos" class="form-label">Número de Embarazos</label>
+          <input
+            type="number"
+            id="antobs_numembarazos"
+            name="antobs_numembarazos"
+            class="form-control"
+            [(ngModel)]="antObstetrico.antobs_numembarazos"
+            min="0"
+          >
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_numpartos" class="form-label">Número de Partos</label>
+          <input
+            type="number"
+            id="antobs_numpartos"
+            name="antobs_numpartos"
+            class="form-control"
+            [(ngModel)]="antObstetrico.antobs_numpartos"
+            min="0"
+          >
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_numcesareas" class="form-label">Número de Cesáreas</label>
+          <input
+            type="number"
+            id="antobs_numcesareas"
+            name="antobs_numcesareas"
+            class="form-control"
+            [(ngModel)]="antObstetrico.antobs_numcesareas"
+            min="0"
+          >
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_abortos" class="form-label">Número de Abortos</label>
+          <input
+            type="number"
+            id="antobs_abortos"
+            name="antobs_abortos"
+            class="form-control"
+            [(ngModel)]="antObstetrico.antobs_abortos"
+            min="0"
+          >
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_fechafinembant" class="form-label">Fecha fin embarazo anterior</label>
+          <input
+            type="date"
+            id="antobs_fechafinembant"
+            name="antobs_fechafinembant"
+            class="form-control"
+            [(ngModel)]="antObstetrico.antobs_fechafinembant"
+          >
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_pesoult" class="form-label">Peso último hijo (gr)</label>
+          <input
+            type="number"
+            id="antobs_pesoult"
+            name="antobs_pesoult"
+            class="form-control"
+            [(ngModel)]="antObstetrico.antobs_pesoult"
+            min="0"
+          >
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_sexoult" class="form-label">Sexo Último Hijo</label>
+          <select
+            id="antobs_sexoult"
+            name="antobs_sexoult"
+            class="form-select"
+            [(ngModel)]="antObstetrico.antobs_sexoult"
+          >
+            <option value="">Seleccione</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_ciclos" class="form-label">Ciclos</label>
+          <input
+            type="text"
+            id="antobs_ciclos"
+            name="antobs_ciclos"
+            class="form-control"
+            [(ngModel)]="antObstetrico.antobs_ciclos"
+          >
+        </div>
+        
+        <!-- Sección: Embarazos y Gestaciones -->
+        <div class="col-md-12 mt-3">
+          <h6 class="section-title">Embarazos y Gestaciones</h6>
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_embplaneado" class="form-label">Embarazo Planeado</label>
+          <select
+            id="antobs_embplaneado"
+            name="antobs_embplaneado"
+            class="form-select"
+            [(ngModel)]="antObstetrico.antobs_embplaneado"
+          >
+            <option value="">Seleccione</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_embmultiple" class="form-label">Embarazo Múltiple</label>
+          <select
+            id="antobs_embmultiple"
+            name="antobs_embmultiple"
+            class="form-select"
+            [(ngModel)]="antObstetrico.antobs_embmultiple"
+          >
+            <option value="">Seleccione</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_numgestaciones" class="form-label">Número de Gestaciones</label>
+          <input
+            type="number"
+            id="antobs_numgestaciones"
+            name="antobs_numgestaciones"
+            class="form-control"
+            [(ngModel)]="antObstetrico.antobs_numgestaciones"
+            min="0"
+          >
+        </div>
+        
+        <!-- Sección: Hijos -->
+        <div class="col-md-12 mt-3">
+          <h6 class="section-title">Hijos</h6>
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_numnacidov" class="form-label">Nacidos Vivos</label>
+          <input
+            type="number"
+            id="antobs_numnacidov"
+            name="antobs_numnacidov"
+            class="form-control"
+            [(ngModel)]="antObstetrico.antobs_numnacidov"
+            min="0"
+          >
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_numnacidom" class="form-label">Nacidos Muertos</label>
+          <input
+            type="number"
+            id="antobs_numnacidom"
+            name="antobs_numnacidom"
+            class="form-control"
+            [(ngModel)]="antObstetrico.antobs_numnacidom"
+            min="0"
+          >
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_vive" class="form-label">Vive Último Hijo</label>
+          <select
+            id="antobs_vive"
+            name="antobs_vive"
+            class="form-select"
+            [(ngModel)]="antObstetrico.antobs_vive"
+          >
+            <option value="">Seleccione</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_mueresem1" class="form-label">Muere Semana 1</label>
+          <select
+            id="antobs_mueresem1"
+            name="antobs_mueresem1"
+            class="form-select"
+            [(ngModel)]="antObstetrico.antobs_mueresem1"
+          >
+            <option value="">Seleccione</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="antobs_mueresem2" class="form-label">Muere Semana 2</label>
+          <select
+            id="antobs_mueresem2"
+            name="antobs_mueresem2"
+            class="form-select"
+            [(ngModel)]="antObstetrico.antobs_mueresem2"
+          >
+            <option value="">Seleccione</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
+          </select>
+        </div>
+        
+        <!-- Sección: Observaciones -->
+        <div class="col-md-12 mt-3">
+          <h6 class="section-title">Observaciones</h6>
+        </div>
+        <div class="col-md-12">
+          <label for="antobs_observacion" class="form-label">Observación</label>
+          <textarea
+            id="antobs_observacion"
+            name="antobs_observacion"
+            class="form-control"
+            [(ngModel)]="antObstetrico.antobs_observacion"
+            rows="2"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario para Antecedentes Ginecológicos -->
+    <div *ngIf="tipoAntecedente === 'antGinecologico'">
+      <div class="row g-2">
+        <!-- Sección: Datos Generales -->
+        <div class="col-md-12">
+          <h6 class="section-title">Datos Generales</h6>
+        </div>
+        <div class="col-md-6">
+          <label for="antgin_usamanticonceptivo" class="form-label">Usa Método Anticonceptivo</label>
+          <select
+            id="antgin_usamanticonceptivo"
+            name="antgin_usamanticonceptivo"
+            class="form-select"
+            [(ngModel)]="antGinecologico.antgin_usamanticonceptivo"
+          >
+            <option value="">Seleccione</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="metant_codigo" class="form-label">Método Anticonceptivo</label>
+          <select
+            id="metant_codigo"
+            name="metant_codigo"
+            class="form-select"
+            [(ngModel)]="antGinecologico.metant_codigo"
+          >
+            <option value="">Seleccione un método</option>
+            <option *ngFor="let metodo of metodosAnticonceptivos" 
+                    [value]="metodo.metant_codigo">
+              {{ metodo.metant_desc }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="antgin_menarquia" class="form-label">Menarquia</label>
+          <select
+            id="antgin_menarquia"
+            name="antgin_menarquia"
+            class="form-select"
+            [(ngModel)]="antGinecologico.antgin_menarquia"
+          >
+            <option value="">Seleccione</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="antgin_edadmenarquia" class="form-label">Edad menarquia</label>
+          <input
+            type="number"
+            id="antgin_edadmenarquia"
+            name="antgin_edadmenarquia"
+            class="form-control"
+            [(ngModel)]="antGinecologico.antgin_edadmenarquia"
+            min="0"
+          >
+        </div>
+        <div class="col-md-6">
+          <label for="antgin_fecultmens" class="form-label">Fecha última menstruación</label>
+          <input
+            type="date"
+            id="antgin_fecultmens"
+            name="antgin_fecultmens"
+            class="form-control"
+            [(ngModel)]="antGinecologico.antgin_fecultmens"
+          >
+        </div>
+        <div class="col-md-6">
+          <label for="antgin_alerta" class="form-label">Alerta</label>
+          <input
+            type="text"
+            id="antgin_alerta"
+            name="antgin_alerta"
+            class="form-control"
+            [(ngModel)]="antGinecologico.antgin_alerta"
+          >
+        </div>
+        
+        <!-- Sección: Observaciones -->
+        <div class="col-md-12 mt-3">
+          <h6 class="section-title">Observaciones</h6>
+        </div>
+        <div class="col-md-12">
+          <label for="antgin_observacion" class="form-label">Observación</label>
+          <textarea
+            id="antgin_observacion"
+            name="antgin_observacion"
+            class="form-control"
+            [(ngModel)]="antGinecologico.antgin_observacion"
+            rows="2"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario para Antecedentes Odontológicos -->
+    <div *ngIf="tipoAntecedente === 'antOdontologico'">
+      <div class="row g-2">
+        <!-- Sección: Datos del Antecedente -->
+        <div class="col-md-12">
+          <h6 class="section-title">Datos del Antecedente</h6>
+        </div>
+        <div class="col-md-6">
+          <label for="dantodo_codigo" class="form-label">Antecedente Odontológico</label>
+          <select
+            id="dantodo_codigo"
+            name="dantodo_codigo"
+            class="form-select"
+            [(ngModel)]="antOdontologico.dantodo_codigo"
+          >
+            <option value="">Seleccione un antecedente</option>
+            <option *ngFor="let tipo of tiposAntecedentesOdontologicos" 
+                    [value]="tipo.tipaodo_codigo">
+              {{ tipo.tipaodo_desc }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="antodo_valor" class="form-label">Valor</label>
+          <select
+            id="antodo_valor"
+            name="antodo_valor"
+            class="form-select"
+            [(ngModel)]="antOdontologico.antodo_valor"
+          >
+            <option value="">Seleccione</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
+            <option value="NO SABE/NO RESPONDE">No sabe/No responde</option>
+          </select>
+        </div>
+        
+        <!-- Sección: Descripción -->
+        <div class="col-md-12 mt-3">
+          <h6 class="section-title">Descripción</h6>
+        </div>
+        <div class="col-md-12">
+          <label for="antodo_desc" class="form-label">Descripción</label>
+          <textarea
+            id="antodo_desc"
+            name="antodo_desc"
+            class="form-control"
+            [(ngModel)]="antOdontologico.antodo_desc"
+            rows="2"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario para Informes de Exámenes Odontológicos -->
+    <div *ngIf="tipoAntecedente === 'informeExaOdon'">
+      <div class="row g-2">
+        <!-- Sección: Datos del Examen -->
+        <div class="col-md-12">
+          <h6 class="section-title">Datos del Examen</h6>
+        </div>
+        <div class="col-md-6">
+          <label for="exaodo_codigo" class="form-label">Examen Odontológico</label>
+          <select
+            id="exaodo_codigo"
+            name="exaodo_codigo"
+            class="form-select"
+            [(ngModel)]="informeExaOdon.exaodo_codigo"
+          >
+            <option value="">Seleccione un examen</option>
+            <option *ngFor="let examen of examenesOdontologicos" 
+                    [value]="examen.exaodo_codigo">
+              {{ examen.exaodo_desc }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="infexaodo_realizado" class="form-label">Realizado</label>
+          <select
+            id="infexaodo_realizado"
+            name="infexaodo_realizado"
+            class="form-select"
+            [(ngModel)]="informeExaOdon.infexaodo_realizado"
+          >
+            <option value="">Seleccione</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
+          </select>
+        </div>
+        
+        <!-- Sección: Descripción -->
+        <div class="col-md-12 mt-3">
+          <h6 class="section-title">Descripción</h6>
+        </div>
+        <div class="col-md-12">
+          <label for="infexaodo_desc" class="form-label">Descripción</label>
+          <textarea
+            id="infexaodo_desc"
+            name="infexaodo_desc"
+            class="form-control"
+            [(ngModel)]="informeExaOdon.infexaodo_desc"
+            rows="2"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer bg-light">
+  <button type="button" class="btn btn-outline-secondary" (click)="cerrarModal()">
+    Cancelar
+  </button>
+  <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="!antForm.valid">
+    {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+  </button>
+</div>

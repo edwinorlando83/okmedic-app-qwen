@@ -1,1 +1,243 @@
-<p>detalle-atencion-consentimiento works!</p>
+<div class="container-fluid py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="mb-0 text-primary">Consentimientos</h2>
+      <p class="text-muted mb-0">Gestione los consentimientos firmados del paciente</p>
+    </div>
+  </div>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargandoConsentimientos" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 mb-0">Cargando consentimientos...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="errorConsentimientos && !cargandoConsentimientos" class="alert alert-danger" role="alert">
+    {{ errorConsentimientos }}
+  </div>
+
+  <!-- Formulario para agregar nuevo consentimiento -->
+  <div *ngIf="!cargandoConsentimientos && !errorConsentimientos" class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Agregar Nuevo Consentimiento</h5>
+    </div>
+    <div class="card-body">
+      <form #consentimientoForm="ngForm">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="tipcon_codigo" class="form-label small">Tipo de Consentimiento</label>
+            <select
+              id="tipcon_codigo"
+              name="tipcon_codigo"
+              class="form-select form-select-sm"
+              [(ngModel)]="nuevoConsentimiento.tipcon_codigo"
+              required
+            >
+              <option value="">Seleccione un tipo</option>
+              <option *ngFor="let tipo of tiposConsentimiento" [value]="tipo.tipcon_codigo">
+                {{ tipo.tipcon_desc }}
+              </option>
+            </select>
+          </div>
+          
+          <div class="col-md-6">
+            <label for="conam_fecha" class="form-label small">Fecha</label>
+            <input
+              type="date"
+              id="conam_fecha"
+              name="conam_fecha"
+              class="form-control form-control-sm"
+              [(ngModel)]="nuevoConsentimiento.conam_fecha"
+              required
+            >
+          </div>
+          
+          <div class="col-md-6">
+            <label for="conam_contestigo" class="form-label small">¿Con Testigo?</label>
+            <select
+              id="conam_contestigo"
+              name="conam_contestigo"
+              class="form-select form-select-sm"
+              [(ngModel)]="nuevoConsentimiento.conam_contestigo"
+              (change)="nuevoConsentimiento.conam_nomtestigo = ''; nuevoConsentimiento.conam_idtestigo = ''"
+            >
+              <option value="SI">Sí</option>
+              <option value="NO">No</option>
+            </select>
+          </div>
+          
+          <div class="col-md-6" *ngIf="nuevoConsentimiento.conam_contestigo === 'SI'">
+            <label for="conam_nomtestigo" class="form-label small">Nombre del Testigo</label>
+            <input
+              type="text"
+              id="conam_nomtestigo"
+              name="conam_nomtestigo"
+              class="form-control form-control-sm"
+              [(ngModel)]="nuevoConsentimiento.conam_nomtestigo"
+            >
+          </div>
+          
+          <div class="col-md-6" *ngIf="nuevoConsentimiento.conam_contestigo === 'SI'">
+            <label for="conam_idtestigo" class="form-label small">ID del Testigo</label>
+            <input
+              type="text"
+              id="conam_idtestigo"
+              name="conam_idtestigo"
+              class="form-control form-control-sm"
+              [(ngModel)]="nuevoConsentimiento.conam_idtestigo"
+            >
+          </div>
+          
+          <div class="col-12">
+            <button type="button" class="btn btn-primary btn-sm" (click)="agregarConsentimiento()" [disabled]="!consentimientoForm.valid">
+              <i class="fas fa-plus me-1"></i>Agregar Consentimiento
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lista de consentimientos existentes -->
+  <div *ngIf="!cargandoConsentimientos && !errorConsentimientos">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="mb-0">Consentimientos Registrados</h5>
+    </div>
+
+    <!-- Mensaje cuando no hay consentimientos -->
+    <div *ngIf="consentimientos.length === 0" class="alert alert-info" role="alert">
+      No hay consentimientos registrados.
+    </div>
+
+    <!-- Lista de consentimientos como cards -->
+    <div class="row g-3" *ngIf="consentimientos.length > 0">
+      <div class="col-md-6 col-lg-4" *ngFor="let consentimiento of consentimientos">
+        <div class="card h-100 shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h6 class="mb-0">{{ getTipoConsentimiento(consentimiento.tipcon_codigo || '') }} </h6>
+          </div>
+          <div class="card-body">
+            <p class="card-text">
+              <small class="text-muted">
+                <strong>Fecha:</strong> {{ consentimiento.conam_fecha || 'N/A' }}<br>
+                <strong>Con Testigo:</strong> {{ consentimiento.conam_contestigo || 'N/A' }}<br>
+                <strong>Testigo:</strong> {{ consentimiento.conam_nomtestigo || 'N/A' }}<br>
+                <strong>ID Testigo:</strong> {{ consentimiento.conam_idtestigo || 'N/A' }}
+              </small>
+            </p>
+            
+            <div class="mt-2">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small">Firma del Paciente:</span>
+                <span class="badge bg-secondary small">
+                  {{ consentimiento.conam_firma ? 'FIRMADO' : 'PENDIENTE' }}
+                </span>
+              </div>
+              
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small">Firma del Testigo:</span>
+                <span class="badge bg-secondary small">
+                  {{ consentimiento.conam_firmatestigo ? 'FIRMADO' : 'PENDIENTE' }}
+                </span>
+              </div>
+              
+              <div *ngIf="consentimiento.conam_documento" class="mt-2">
+                <button type="button" class="btn btn-sm btn-outline-info" (click)="descargarDocumento(consentimiento)">
+                  <i class="fas fa-download me-1"></i>Documento
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer bg-white border-top-0">
+            <div class="d-flex justify-content-end gap-2">
+              <button class="btn btn-sm btn-outline-primary" (click)="abrirFirma(consentimiento, 'paciente')">
+                <i class="fas fa-signature me-1"></i>Paciente
+              </button>
+              <button *ngIf="consentimiento.conam_contestigo === 'SI'" 
+                      class="btn btn-sm btn-outline-success" 
+                      (click)="abrirFirma(consentimiento, 'testigo')">
+                <i class="fas fa-user-check me-1"></i>Testigo
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="eliminarConsentimiento(consentimiento)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para firma digital del paciente -->
+  <div class="modal fade" id="modalFirmaPaciente" tabindex="-1" *ngIf="mostrarFirmaPaciente" style="display: block; background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Firma Digital - Paciente</h5>
+          <button type="button" class="btn-close btn-close-white" (click)="cerrarModalFirma('paciente')" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted small">Dibuje su firma en el área a continuación</p>
+          <div class="border rounded" style="height: 200px; position: relative;">
+            <canvas #firmaPacienteCanvas 
+                    class="w-100 h-100"
+                    (mousedown)="comenzarDibujo($event, 'paciente')"
+                    (mousemove)="dibujar($event, 'paciente')"
+                    (mouseup)="detenerDibujo('paciente')"
+                    (mouseleave)="detenerDibujo('paciente')"
+                    (touchstart)="comenzarDibujo($event, 'paciente')"
+                    (touchmove)="dibujar($event, 'paciente')"
+                    (touchend)="detenerDibujo('paciente')">
+            </canvas>
+          </div>
+          <div class="d-flex justify-content-end gap-2 mt-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="limpiarFirma('paciente')">
+              Limpiar
+            </button>
+            <button type="button" class="btn btn-sm btn-primary" (click)="guardarFirma('paciente')">
+              Guardar Firma
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para firma digital del testigo -->
+  <div class="modal fade" id="modalFirmaTestigo" tabindex="-1" *ngIf="mostrarFirmaTestigo" style="display: block; background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">Firma Digital - Testigo</h5>
+          <button type="button" class="btn-close btn-close-white" (click)="cerrarModalFirma('testigo')" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted small">Dibuje la firma del testigo en el área a continuación</p>
+          <div class="border rounded" style="height: 200px; position: relative;">
+            <canvas #firmaTestigoCanvas 
+                    class="w-100 h-100"
+                    (mousedown)="comenzarDibujo($event, 'testigo')"
+                    (mousemove)="dibujar($event, 'testigo')"
+                    (mouseup)="detenerDibujo('testigo')"
+                    (mouseleave)="detenerDibujo('testigo')"
+                    (touchstart)="comenzarDibujo($event, 'testigo')"
+                    (touchmove)="dibujar($event, 'testigo')"
+                    (touchend)="detenerDibujo('testigo')">
+            </canvas>
+          </div>
+          <div class="d-flex justify-content-end gap-2 mt-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="limpiarFirma('testigo')">
+              Limpiar
+            </button>
+            <button type="button" class="btn btn-sm btn-success" (click)="guardarFirma('testigo')">
+              Guardar Firma
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -15,7 +15,9 @@ import { DetalleAtencionTratamiento } from './detalle-atencion-tratamiento/detal
 import { DetalleAtencionConsentimiento } from './detalle-atencion-consentimiento/detalle-atencion-consentimiento';
 import { DetalleAtencionProcedimiento } from './detalle-atencion-procedimiento/detalle-atencion-procedimiento';
 import { DetalleAtencionCertificado } from './detalle-atencion-certificado/detalle-atencion-certificado';
-import { FrappeApiService } from '../../services/frappe-api.service';
+ 
+import { AtencionService } from '../../services/atencion.service';
+import { MessageUtilsService } from '../../utils/message-utils.service';
 
 @Component({
   selector: 'app-detalle-atencion',
@@ -36,15 +38,25 @@ import { FrappeApiService } from '../../services/frappe-api.service';
     DetalleAtencionTratamiento,
     DetalleAtencionConsentimiento,
     DetalleAtencionProcedimiento,
-    DetalleAtencionCertificado
+    DetalleAtencionCertificado,
+     
   ],
-  templateUrl: './detalle-atencion-component.html',
-  styleUrls: ['./detalle-atencion-component.css']
+ templateUrl: './detalle-atencion-component.html',
+  styleUrl: './detalle-atencion-component.css'
 })
-export class DetalleAtencionComponent implements OnInit {
+export class DetalleAtencionComponent   {
   @Input() ate_id: string = ''; // Recibimos el ID de la atención como input
 
   activeTab = 'historial'; // Pestaña activa por defecto
+
+
+  // Datos combinados del paciente y médico (de la nueva API)
+  infoPacienteDoctor: any = null; // Puedes tiparlo mejor con una interfaz si la defines
+  cargandoInfo = false;
+  errorInfo = '';
+
+
+
   paciente = {
     nombre: 'María González Pérez',
     cedula: '12.345.678',
@@ -76,22 +88,46 @@ export class DetalleAtencionComponent implements OnInit {
   ];
 
   constructor(private router: Router, private route: ActivatedRoute,
- private frappeApiService: FrappeApiService
-
+ private atencionService: AtencionService,
+     private messageUtils: MessageUtilsService
   ) { }
 
   ngOnInit(): void {
     // Si se pasa el ate_id como parámetro de ruta, lo usamos
-    this.route.params.subscribe(params => {
-      if (params['ate_id']) {
-        this.ate_id = params['ate_id'];
-        console.log('ID de atención recibido desde la ruta:', this.ate_id);
-        // Aquí podrías cargar los datos del paciente y la atención usando el ID
-        // this.cargarDatosAtencion(this.ate_id);
-      } else if (!this.ate_id) {
-        // Si no se pasa por input ni por ruta, redirigir o mostrar error
-        console.error('No se proporcionó el ID de atención (ate_id)');
-        // this.router.navigate(['/error']);
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('ate_id');
+      if (id) {
+        this.ate_id = id;
+        // Cargar la información combinada del paciente y médico
+        this.cargarInfoPacienteDoctor(id);
+      } else if (this.ate_id) {
+        // Si se pasa como @Input
+        this.cargarInfoPacienteDoctor(this.ate_id);
+      } else {
+        this.errorInfo = 'No se proporcionó el ID de atención.';
+        this.messageUtils.mostrarError('Error', this.errorInfo);
+      }
+    });
+  }
+
+
+   private cargarInfoPacienteDoctor(id: string): void {
+    this.cargandoInfo = true;
+    this.errorInfo = '';
+    console.log(`Cargando info paciente-doctor para atención: ${id}`);
+
+    this.atencionService.getInfoPacienteDoctor(id).subscribe({
+      next: (data) => {
+        console.log('Info paciente-doctor cargada:', data);
+        this.infoPacienteDoctor = data;
+        this.cargandoInfo = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar info paciente-doctor:', err);
+        this.errorInfo = 'Error al cargar la información del paciente y médico.';
+        this.cargandoInfo = false;
+        // El mensaje de error ya se muestra en el servicio
+        // this.messageUtils.mostrarErrorDeFrappe('Error al cargar info', err);
       }
     });
   }
@@ -100,11 +136,23 @@ export class DetalleAtencionComponent implements OnInit {
     this.activeTab = tabId;
   }
 
-  // Método para cargar datos (implementación futura)
-  /*
-  private cargarDatosAtencion(id: string): void {
-    // Llamar al servicio para obtener los datos de la atención
-    // y actualizar this.paciente y this.medico
+ formatearFecha(fechaStr: string): string {
+    if (!fechaStr) return 'N/A';
+    const fecha = new Date(fechaStr);
+    return isNaN(fecha.getTime()) ? fechaStr : fecha.toLocaleDateString('es-EC');
   }
-  */
+
+  calcularEdad(fechaNacStr: string): number | null {
+    if (!fechaNacStr) return null;
+    const hoy = new Date();
+    const fechaNac = new Date(fechaNacStr);
+    if (isNaN(fechaNac.getTime())) return null;
+
+    let edad = hoy.getFullYear() - fechaNac.getFullYear();
+    const mes = hoy.getMonth() - fechaNac.getMonth();
+    if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNac.getDate())) {
+        edad--;
+    }
+    return edad >= 0 ? edad : null;
+  }
 }

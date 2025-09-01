@@ -1,1 +1,360 @@
-<p>detalle-atencion-signos-vitales works!</p>
+<div class="container-fluid py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="mb-0 text-primary">Signos Vitales</h2>
+      <p class="text-muted mb-0">Registre los signos vitales del paciente</p>
+    </div>
+  </div>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargandoSignosVitales" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 mb-0">Cargando registro de signos vitales...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="errorSignosVitales && !cargandoSignosVitales" class="alert alert-danger" role="alert">
+    {{ errorSignosVitales }}
+  </div>
+
+  <!-- Formulario de signos vitales -->
+  <div *ngIf="!cargandoSignosVitales && !errorSignosVitales && signoVital" class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Registro de Signos Vitales</h5>
+    </div>
+    <div class="card-body">
+      <form #signoForm="ngForm">
+        <div class="row g-3">
+          <!-- Sección de datos básicos -->
+          <div class="col-12">
+            <h6 class="fw-bold text-primary mb-3">Datos Básicos</h6>
+          </div>
+          
+          <div class="col-md-6">
+            <label for="sigvit_fecha" class="form-label small">Fecha</label>
+            <input
+              type="datetime-local"
+              id="sigvit_fecha"
+              name="sigvit_fecha"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_fecha"
+              (change)="calcularIMC()"
+            >
+          </div>
+          
+          <div class="col-md-6">
+            <label for="pac_historiaclinica" class="form-label small">Paciente</label>
+            <input
+              type="text"
+              id="pac_historiaclinica"
+              name="pac_historiaclinica"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.pac_historiaclinica"
+              readonly
+            >
+          </div>
+          
+          <div class="col-md-6">
+            <label for="prosal_cedopasaporte" class="form-label small">Profesional de Salud</label>
+            <input
+              type="text"
+              id="prosal_cedopasaporte"
+              name="prosal_cedopasaporte"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.prosal_cedopasaporte"
+              readonly
+            >
+          </div>
+          
+          <div class="col-md-6">
+            <label for="sigvit_cita" class="form-label small">Cita Origen</label>
+            <input
+              type="text"
+              id="sigvit_cita"
+              name="sigvit_cita"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_cita"
+              readonly
+            >
+          </div>
+          
+          <!-- Sección de datos antropométricos -->
+          <div class="col-12 mt-3">
+            <h6 class="fw-bold text-primary mb-3">Datos Antropométricos</h6>
+          </div>
+          
+          <div class="col-md-4">
+            <label for="sigvit_peso" class="form-label small">Peso (kg)</label>
+            <input
+              type="number"
+              id="sigvit_peso"
+              name="sigvit_peso"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_peso"
+              step="0.01"
+              min="0"
+              (change)="calcularIMC()"
+            >
+          </div>
+          
+          <div class="col-md-4">
+            <label for="sigvit_altura" class="form-label small">Altura (cm)</label>
+            <input
+              type="number"
+              id="sigvit_altura"
+              name="sigvit_altura"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_altura"
+              step="0.01"
+              min="0"
+              (change)="calcularIMC()"
+            >
+          </div>
+          
+          <div class="col-md-4">
+            <label for="sigvit_imc" class="form-label small">IMC</label>
+            <input
+              type="number"
+              id="sigvit_imc"
+              name="sigvit_imc"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_imc"
+              step="0.01"
+              min="0"
+              readonly
+            >
+          </div>
+          
+          <div class="col-md-6">
+            <label for="sigvit_perimetroabd" class="form-label small">Perímetro Abdominal (cm)</label>
+            <input
+              type="number"
+              id="sigvit_perimetroabd"
+              name="sigvit_perimetroabd"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_perimetroabd"
+              step="0.01"
+              min="0"
+            >
+          </div>
+          
+          <div class="col-md-6">
+            <label for="sigvit_perimetrocef" class="form-label small">Perímetro Cefálico (cm)</label>
+            <input
+              type="number"
+              id="sigvit_perimetrocef"
+              name="sigvit_perimetrocef"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_perimetrocef"
+              step="0.01"
+              min="0"
+            >
+          </div>
+          
+          <div class="col-md-6">
+            <label for="sigvit_abdomen" class="form-label small">Abdomen (cm)</label>
+            <input
+              type="number"
+              id="sigvit_abdomen"
+              name="sigvit_abdomen"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_abdomen"
+              step="0.01"
+              min="0"
+            >
+          </div>
+          
+          <!-- Sección de signos vitales -->
+          <div class="col-12 mt-3">
+            <h6 class="fw-bold text-primary mb-3">Signos Vitales</h6>
+          </div>
+          
+          <div class="col-md-4">
+            <label for="sigvit_presionasis" class="form-label small">Presión Sistólica (mmHg)</label>
+            <input
+              type="number"
+              id="sigvit_presionasis"
+              name="sigvit_presionasis"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_presionasis"
+              step="0.01"
+              min="0"
+            >
+          </div>
+          
+          <div class="col-md-4">
+            <label for="sigvit_presionadia" class="form-label small">Presión Diastólica (mmHg)</label>
+            <input
+              type="number"
+              id="sigvit_presionadia"
+              name="sigvit_presionadia"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_presionadia"
+              step="0.01"
+              min="0"
+            >
+          </div>
+          
+          <div class="col-md-4">
+            <label for="sigvit_presionmedia" class="form-label small">Presión Media (mmHg)</label>
+            <input
+              type="number"
+              id="sigvit_presionmedia"
+              name="sigvit_presionmedia"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_presionmedia"
+              step="0.01"
+              min="0"
+            >
+          </div>
+          
+          <div class="col-md-4">
+            <label for="sigvit_temperatura" class="form-label small">Temperatura (°C)</label>
+            <input
+              type="number"
+              id="sigvit_temperatura"
+              name="sigvit_temperatura"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_temperatura"
+              step="0.01"
+              min="0"
+            >
+          </div>
+          
+          <div class="col-md-4">
+            <label for="sigvit_frecardiaca" class="form-label small">Frec. Cardíaca (lat/min)</label>
+            <input
+              type="number"
+              id="sigvit_frecardiaca"
+              name="sigvit_frecardiaca"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_frecardiaca"
+              step="0.01"
+              min="0"
+            >
+          </div>
+          
+          <div class="col-md-4">
+            <label for="sigvit_satoxigeno" class="form-label small">Saturación (%)</label>
+            <input
+              type="number"
+              id="sigvit_satoxigeno"
+              name="sigvit_satoxigeno"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_satoxigeno"
+              step="0.01"
+              min="0"
+            >
+          </div>
+          
+          <div class="col-md-4">
+            <label for="sigvit_frerespiratoria" class="form-label small">Frec. Respiratoria (resp/min)</label>
+            <input
+              type="number"
+              id="sigvit_frerespiratoria"
+              name="sigvit_frerespiratoria"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_frerespiratoria"
+              step="0.01"
+              min="0"
+            >
+          </div>
+          
+          <div class="col-md-4">
+            <label for="sigvit_glucosacap" class="form-label small">Glucosa Capilar (mg/dL)</label>
+            <input
+              type="number"
+              id="sigvit_glucosacap"
+              name="sigvit_glucosacap"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_glucosacap"
+              step="0.01"
+              min="0"
+            >
+          </div>
+          
+          <!-- Sección de datos adicionales -->
+          <div class="col-12 mt-3">
+            <h6 class="fw-bold text-primary mb-3">Datos Adicionales</h6>
+          </div>
+          
+          <div class="col-md-6">
+            <label for="sigvit_colorlengua" class="form-label small">Color de la Lengua</label>
+            <input
+              type="text"
+              id="sigvit_colorlengua"
+              name="sigvit_colorlengua"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_colorlengua"
+            >
+          </div>
+          
+          <div class="col-md-6">
+            <label for="sigvit_reflejo" class="form-label small">Reflejo</label>
+            <input
+              type="text"
+              id="sigvit_reflejo"
+              name="sigvit_reflejo"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_reflejo"
+            >
+          </div>
+          
+          <div class="col-md-6">
+            <label for="sigvit_pulso" class="form-label small">Pulso</label>
+            <input
+              type="text"
+              id="sigvit_pulso"
+              name="sigvit_pulso"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_pulso"
+            >
+          </div>
+          
+          <div class="col-md-6">
+            <label for="sigvit_hemoglobina" class="form-label small">Hemoglobina (g/dL)</label>
+            <input
+              type="text"
+              id="sigvit_hemoglobina"
+              name="sigvit_hemoglobina"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_hemoglobina"
+            >
+          </div>
+          
+          <div class="col-md-6">
+            <label for="sigvit_hemoglobinacorre" class="form-label small">Hemoglobina Corregida (g/dL)</label>
+            <input
+              type="text"
+              id="sigvit_hemoglobinacorre"
+              name="sigvit_hemoglobinacorre"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_hemoglobinacorre"
+            >
+          </div>
+          
+          <div class="col-12">
+            <label for="sigvit_observacion" class="form-label small">Observación</label>
+            <textarea
+              id="sigvit_observacion"
+              name="sigvit_observacion"
+              class="form-control form-control-sm"
+              [(ngModel)]="signoVital.sigvit_observacion"
+              rows="2"
+            ></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer bg-light d-flex justify-content-end gap-2">
+      <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelar()">
+        Cancelar
+      </button>
+      <button type="button" class="btn btn-primary btn-sm" (click)="guardar()" [disabled]="!signoForm.valid">
+        {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+      </button>
+    </div>
+  </div>
+</div>

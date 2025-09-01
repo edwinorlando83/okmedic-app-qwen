@@ -10,11 +10,11 @@
       </h3>
       <div class="info-field">
         <label>Nombre:</label>
-        <span>{{ paciente.nombre }}</span>
+        <span>{{ infoPacienteDoctor.pac_nombrecompleto }}</span>
       </div>
       <div class="info-field">
         <label>Cédula:</label>
-        <span>{{ paciente.cedula }}</span>
+        <span>{{ infoPacienteDoctor.pac_identificacion }}</span>
       </div>
       <div class="info-field">
         <label>Edad:</label>
@@ -22,7 +22,7 @@
       </div>
       <div class="info-field">
         <label>Teléfono:</label>
-        <span>{{ paciente.telefono }}</span>
+        <span>{{ infoPacienteDoctor.pac_telefono }}</span>
       </div>
     </div>
     <div class="info-card">
@@ -34,23 +34,26 @@
       </h3>
       <div class="info-field">
         <label>Doctor:</label>
-        <span>{{ medico.nombre }}</span>
+        <span>{{ infoPacienteDoctor.prosal_nombrecompleto }}</span>
       </div>
       <div class="info-field">
         <label>Especialidad:</label>
-        <span>{{ medico.especialidad }}</span>
+        <span>{{ infoPacienteDoctor.v_especialidades }}</span>
       </div>
+      
       <div class="info-field">
-        <label>Registro:</label>
-        <span>{{ medico.registro }}</span>
+        <label>Fecha inicio consulta:</label>
+        <span>{{ infoPacienteDoctor.ate_fechaini }} {{ infoPacienteDoctor.ate_horaini }}  </span>
       </div>
-      <div class="info-field">
-        <label>Fecha:</label>
-        <span>{{ medico.fecha }}</span>
+
+       <div class="info-field">
+        <label>Fecha fin consulta:</label>
+        <span>{{ infoPacienteDoctor.ate_fechafin }} {{ infoPacienteDoctor.ate_horafin }}  </span>
       </div>
     </div>
   </div>
   
+ 
   <div class="main-content">
     <div class="tabs-container">
       <button 

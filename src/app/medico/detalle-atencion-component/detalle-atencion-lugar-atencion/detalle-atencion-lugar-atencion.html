@@ -1,1 +1,80 @@
-<p>detalle-atencion-lugar-atencion works!</p>
+<!-- src/app/detalle-atencion-lugar-atencion/detalle-atencion-lugar-atencion.component.html -->
+ 
+<div class="lugar-atencion-container">
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3 border-bottom">
+      <h5 class="mb-0">
+        <i class="fas fa-hospital me-2 text-primary"></i>
+        Lugar de Atención  
+      </h5>
+    </div>
+    <div class="card-body">
+      <!-- Mensaje de carga -->
+      <div *ngIf="cargandoLugares" class="text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2 mb-0">Cargando lugares de atención...</p>
+      </div>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="error && !cargandoLugares" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="d-flex">
+          <i class="fas fa-exclamation-triangle fa-lg me-3"></i>
+          <div>
+            <h5 class="alert-heading">¡Ups! Algo salió mal</h5>
+            <p class="mb-0">{{ error }}</p>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="error=''"></button>
+      </div>
+
+      <!-- Mensaje de éxito -->
+      <div *ngIf="exito && !cargandoActualizacion" class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="d-flex">
+          <i class="fas fa-check-circle fa-lg me-3"></i>
+          <div>
+            <h5 class="alert-heading">¡Éxito!</h5>
+            <p class="mb-0">{{ exito }}</p>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="exito=''"></button>
+      </div>
+
+      <!-- Formulario (visible cuando no está cargando) -->
+      <div *ngIf="!cargandoLugares">
+        <div class="mb-3">
+          <label for="lugate_codigo" class="form-label">
+            <i class="fas fa-map-marker-alt me-2"></i>
+            Seleccione el Lugar de Atención *
+          </label>
+          <div class="input-group">
+            <select
+              id="lugate_codigo"
+              name="lugate_codigo"
+              class="form-select"
+              [(ngModel)]="lugate_codigo_seleccionado"
+              [disabled]="cargandoActualizacion"
+              required
+            >
+              <option value="">Seleccione...</option>
+              <option *ngFor="let lugar of lugaresAtencion" [value]="lugar.name">
+                {{ lugar.lugate_desc }}
+              </option>
+            </select>
+            <button
+              class="btn btn-outline-primary"
+              type="button"
+              (click)="actualizarLugarAtencion()"
+              [disabled]="cargandoActualizacion || !lugate_codigo_seleccionado"
+            >
+              <span *ngIf="cargandoActualizacion" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+              <i *ngIf="!cargandoActualizacion" class="fas fa-sync-alt"></i>
+              {{ cargandoActualizacion ? 'Actualizando...' : 'Actualizar' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -18,6 +18,11 @@ interface FrappeSingleResponse<T> {
 interface FrappeMessageResponse {
   message: any;
 }
+interface GetOptions {
+  fields?: string[]; // Ej: ['name', 'pac_nombrecompleto', 'pac_identificacion']
+  filters?: any[];    // Filtros adicionales si es necesario (aunque para get por name, no suele usarse)
+  // Puedes añadir más opciones según las necesites
+}
 
 // Tipo para filtros
 type FrappeFilterOperator = '=' | '!=' | '>' | '<' | '>=' | '<=' | 'like' | 'in' | 'not in' | 'between';
@@ -53,11 +58,11 @@ export class FrappeApiService {
   private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    
+
     if (token) {
       headers = headers.set('Authorization', token);
     }
-    
+
     return headers;
   }
 
@@ -157,6 +162,38 @@ export class FrappeApiService {
   }
 
   /**
+   * Obtiene un documento específico por su nombre.
+   * 
+   * @param doctype El nombre del DocType.
+   * @param name El nombre (ID) del documento.
+   * @param options Opciones adicionales como campos a solicitar.
+   * @returns Un observable con el documento.
+   */
+  get2<T>(doctype: string, name: string, options?: GetOptions): Observable<T> {
+    let params = new HttpParams();
+
+    // Añadir parámetros opcionales si se proporcionan
+    if (options?.fields) {
+      // Frappe espera un string JSON para el parámetro 'fields'
+      params = params.set('fields', JSON.stringify(options.fields));
+    }
+
+    // Puedes añadir más opciones aquí si es necesario, por ejemplo:
+    // if (options?.filters) {
+    //   params = params.set('filters', JSON.stringify(options.filters));
+    // }
+
+    const url = `${this.API_URL}/resource/${doctype}/${name}`;
+    const headers = this.getHeaders();
+
+    return this.http.get<FrappeSingleResponse<T>>(url, { headers, params })
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
    * Actualiza un documento existente.
    * 
    * @param doctype El nombre del DocType.
@@ -193,6 +230,30 @@ export class FrappeApiService {
       );
   }
 
+  deleteChildRecord(
+    parentDoctype: string,
+    parentName: string,
+    childField: string,
+    childName: string
+  ): Observable<any> {
+    const payload = {
+      parent_doctype: parentDoctype,
+      parent_name: parentName,
+      child_fieldname: childField,
+      child_name: childName
+    };
+    const url = `okmedic.servicios.agenda.delete_child_row`;
+    return this.call(url, {}, payload).pipe(
+      catchError((error) => {
+        console.error(
+          `Error al eliminar hijo ${childName} de ${childField}:`,
+          error
+        );
+        return throwError(() => error);
+      })
+    );
+  }
+
   // --- Remote Method Calls ---
 
   /**
@@ -206,7 +267,7 @@ export class FrappeApiService {
   call(methodPath: string, params?: any, body?: any): Observable<any> {
     const url = `${this.API_URL}/method/${methodPath}`;
     const headers = this.getHeaders();
-    
+
     // Determinar si es GET o POST basado en si hay body
     if (body !== undefined) {
       // POST request
@@ -223,7 +284,7 @@ export class FrappeApiService {
           httpParams = httpParams.set(key, params[key]);
         });
       }
-      
+
       return this.http.get<FrappeMessageResponse>(url, { headers, params: httpParams })
         .pipe(
           map(response => response.message),
@@ -231,4 +292,8 @@ export class FrappeApiService {
         );
     }
   }
+
+
+
+
 }

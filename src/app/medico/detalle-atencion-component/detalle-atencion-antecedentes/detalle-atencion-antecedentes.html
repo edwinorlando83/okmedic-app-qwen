@@ -1,1 +1,277 @@
-<p>detalle-atencion-antecedentes works!</p>
+<div class="container-fluid py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="mb-0 text-primary">Antecedentes del Paciente</h2>
+      <p class="text-muted mb-0">Gestiona los antecedentes médicos del paciente</p>
+    </div>
+  </div>
+
+  <!-- Pestañas para cada tipo de antecedente -->
+  <ul class="nav nav-tabs mb-4" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link active" id="ant-obstetricos-tab" data-bs-toggle="tab" href="#ant-obstetricos" role="tab" aria-controls="ant-obstetricos" aria-selected="true">
+        <i class="fas fa-baby me-2"></i>Ant. Obstétricos
+      </a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" id="ant-ginecologicos-tab" data-bs-toggle="tab" href="#ant-ginecologicos" role="tab" aria-controls="ant-ginecologicos" aria-selected="false">
+        <i class="fas fa-venus me-2"></i>Ant. Ginecológicos
+      </a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" id="ant-odontologicos-tab" data-bs-toggle="tab" href="#ant-odontologicos" role="tab" aria-controls="ant-odontologicos" aria-selected="false">
+        <i class="fas fa-tooth me-2"></i>Ant. Odontológicos
+      </a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" id="inf-exa-odon-tab" data-bs-toggle="tab" href="#inf-exa-odon" role="tab" aria-controls="inf-exa-odon" aria-selected="false">
+        <i class="fas fa-file-medical me-2"></i>Inf. Exámenes Odon.
+      </a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <!-- Antecedentes Obstétricos -->
+    <div class="tab-pane fade show active" id="ant-obstetricos" role="tabpanel">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <h5 class="mb-0">Lista de Antecedentes Obstétricos</h5>
+        <button class="btn btn-primary btn-sm" (click)="abrirModalAntObstetrico()">
+          <i class="fas fa-plus me-1"></i>Agregar
+        </button>
+      </div>
+
+      <!-- Mensaje de carga -->
+      <div *ngIf="cargandoAntObstetricos" class="text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2 mb-0">Cargando antecedentes obstétricos...</p>
+      </div>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="errorAntObstetricos && !cargandoAntObstetricos" class="alert alert-danger" role="alert">
+        {{ errorAntObstetricos }}
+      </div>
+
+      <!-- Lista de registros -->
+      <div *ngIf="!cargandoAntObstetricos && !errorAntObstetricos">
+        <div *ngIf="antObstetricos.length === 0" class="alert alert-info" role="alert">
+          No hay antecedentes obstétricos registrados.
+        </div>
+
+        <div class="row g-3" *ngIf="antObstetricos.length > 0">
+          <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let ant of antObstetricos">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h6 class="card-title">{{ ant.antobs_fur ? (ant.antobs_fur | date:'dd/MM/yyyy') : 'Sin FUR' }}</h6>
+                <p class="card-text">
+                  <small class="text-muted">
+                    <strong>Peso:</strong> {{ ant.antobs_peso || 'N/A' }} kg<br>
+                    <strong>Talla:</strong> {{ ant.antobs_talla || 'N/A' }} cm<br>
+                    <strong>IMC:</strong> {{ ant.antobs_imc || 'N/A' }}<br>
+                    <strong>Abortos:</strong> {{ ant.antobs_abortos || 0 }}<br>
+                    <strong>Complicaciones:</strong> {{ ant.antobs_complicaciones || 'Ninguna' }}
+                  </small>
+                </p>
+              </div>
+              <div class="card-footer bg-white border-top-0">
+                <div class="d-flex justify-content-end gap-2">
+                  <button class="btn btn-sm btn-outline-primary" (click)="abrirModalAntObstetrico(ant)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="eliminarAntObstetrico(ant)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Antecedentes Ginecológicos -->
+    <div class="tab-pane fade" id="ant-ginecologicos" role="tabpanel">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <h5 class="mb-0">Lista de Antecedentes Ginecológicos</h5>
+        <button class="btn btn-primary btn-sm" (click)="abrirModalAntGinecologico()">
+          <i class="fas fa-plus me-1"></i>Agregar
+        </button>
+      </div>
+
+      <!-- Mensaje de carga -->
+      <div *ngIf="cargandoAntGinecologicos" class="text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2 mb-0">Cargando antecedentes ginecológicos...</p>
+      </div>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="errorAntGinecologicos && !cargandoAntGinecologicos" class="alert alert-danger" role="alert">
+        {{ errorAntGinecologicos }}
+      </div>
+
+      <!-- Lista de registros -->
+      <div *ngIf="!cargandoAntGinecologicos && !errorAntGinecologicos">
+        <div *ngIf="antGinecologicos.length === 0" class="alert alert-info" role="alert">
+          No hay antecedentes ginecológicos registrados.
+        </div>
+
+        <div class="row g-3" *ngIf="antGinecologicos.length > 0">
+          <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let ant of antGinecologicos">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h6 class="card-title">{{ ant.antgin_fecultmens   }}</h6>
+                <p class="card-text">
+                  <small class="text-muted">
+                    <strong>Menarquia:</strong> {{ ant.antgin_menarquia  }}<br>
+                    <strong>Edad menarquia:</strong> {{ ant.antgin_edadmenarquia  }} años<br>
+                    <strong>Usa método:</strong> {{ ant.antgin_usamanticonceptivo  }}<br>
+                    <strong>Método:</strong> {{ ant.metant_codigo   }}<br>
+                    <strong>Observación:</strong> {{ ant.antgin_observacion   }}
+                  </small>
+                </p>
+              </div>
+              <div class="card-footer bg-white border-top-0">
+                <div class="d-flex justify-content-end gap-2">
+                  <button class="btn btn-sm btn-outline-primary" (click)="abrirModalAntGinecologico(ant)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="eliminarAntGinecologico(ant)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Antecedentes Odontológicos -->
+    <div class="tab-pane fade" id="ant-odontologicos" role="tabpanel">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <h5 class="mb-0">Lista de Antecedentes Odontológicos</h5>
+        <button class="btn btn-primary btn-sm" (click)="abrirModalAntOdontologico()">
+          <i class="fas fa-plus me-1"></i>Agregar
+        </button>
+      </div>
+
+      <!-- Mensaje de carga -->
+      <div *ngIf="cargandoAntOdontologicos" class="text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2 mb-0">Cargando antecedentes odontológicos...</p>
+      </div>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="errorAntOdontologicos && !cargandoAntOdontologicos" class="alert alert-danger" role="alert">
+        {{ errorAntOdontologicos }}
+      </div>
+
+      <!-- Lista de registros -->
+      <div *ngIf="!cargandoAntOdontologicos && !errorAntOdontologicos">
+        <div *ngIf="antOdontologicos.length === 0" class="alert alert-info" role="alert">
+          No hay antecedentes odontológicos registrados.
+        </div>
+
+        <div class="row g-3" *ngIf="antOdontologicos.length > 0">
+          <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let ant of antOdontologicos">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h6 class="card-title">{{ ant.dantodo_codigo }}</h6>
+                <p class="card-text">
+                  <small class="text-muted">
+                    <strong>Valor:</strong> 
+                    <span [ngClass]="{
+                      'text-success': ant.antodo_valor === 'SI',
+                      'text-danger': ant.antodo_valor === 'NO',
+                      'text-warning': ant.antodo_valor === 'SIN INFORMACION'
+                    }">
+                      {{ ant.antodo_valor || 'N/A' }}
+                    </span><br>
+                    <strong>Descripción:</strong> {{ ant.antodo_desc || 'Ninguna' }}
+                  </small>
+                </p>
+              </div>
+              <div class="card-footer bg-white border-top-0">
+                <div class="d-flex justify-content-end gap-2">
+                  <button class="btn btn-sm btn-outline-primary" (click)="abrirModalAntOdontologico(ant)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="eliminarAntOdontologico(ant)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Informes de Exámenes Odontológicos -->
+    <div class="tab-pane fade" id="inf-exa-odon" role="tabpanel">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <h5 class="mb-0">Lista de Informes de Exámenes Odontológicos</h5>
+        <button class="btn btn-primary btn-sm" (click)="abrirModalInformeExaOdon()">
+          <i class="fas fa-plus me-1"></i>Agregar
+        </button>
+      </div>
+
+      <!-- Mensaje de carga -->
+      <div *ngIf="cargandoInformesExaOdon" class="text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2 mb-0">Cargando informes de exámenes odontológicos...</p>
+      </div>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="errorInformesExaOdon && !cargandoInformesExaOdon" class="alert alert-danger" role="alert">
+        {{ errorInformesExaOdon }}
+      </div>
+
+      <!-- Lista de registros -->
+      <div *ngIf="!cargandoInformesExaOdon && !errorInformesExaOdon">
+        <div *ngIf="informesExaOdon.length === 0" class="alert alert-info" role="alert">
+          No hay informes de exámenes odontológicos registrados.
+        </div>
+
+        <div class="row g-3" *ngIf="informesExaOdon.length > 0">
+          <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let inf of informesExaOdon">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h6 class="card-title">{{ inf.exaodo_codigo }}</h6>
+                <p class="card-text">
+                  <small class="text-muted">
+                    <strong>Realizado:</strong> 
+                    <span [ngClass]="{
+                      'text-success': inf.infexaodo_realizado === 'SI',
+                      'text-danger': inf.infexaodo_realizado === 'NO'
+                    }">
+                      {{ inf.infexaodo_realizado  }}
+                    </span><br>
+                    <strong>Descripción:</strong> {{ inf.infexaodo_desc   }}
+                  </small>
+                </p>
+              </div>
+              <div class="card-footer bg-white border-top-0">
+                <div class="d-flex justify-content-end gap-2">
+                  <button class="btn btn-sm btn-outline-primary" (click)="abrirModalInformeExaOdon(inf)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="eliminarInformeExaOdon(inf)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

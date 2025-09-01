@@ -1,1 +1,154 @@
-<p>detalle-atencion-examen-fisco works!</p>
+<div class="container-fluid py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="mb-0 text-primary">Examen Físico</h2>
+      <p class="text-muted mb-0">Registre el examen físico del paciente</p>
+    </div>
+  </div>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargandoExamenFisico" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 mb-0">Cargando registro de examen físico...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="errorExamenFisico && !cargandoExamenFisico" class="alert alert-danger" role="alert">
+    {{ errorExamenFisico }}
+  </div>
+
+  <!-- Formulario de examen físico -->
+  <div *ngIf="!cargandoExamenFisico && !errorExamenFisico && examenFisico" class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Examen Físico</h5>
+    </div>
+    <div class="card-body">
+      <form #examenForm="ngForm">
+        <div class="row g-3">
+          <!-- Sección de datos básicos -->
+          <div class="col-12">
+            <h6 class="fw-bold text-primary mb-3">Datos Generales</h6>
+          </div>
+          
+          <div class="col-md-6">
+            <label for="exafis_fecha" class="form-label small">Fecha de Realización</label>
+            <input
+              type="date"
+              id="exafis_fecha"
+              name="exafis_fecha"
+              class="form-control form-control-sm"
+              [(ngModel)]="examenFisico.exafis_fecha"
+            >
+          </div>
+          
+          <div class="col-md-6">
+            <label for="exafis_hora" class="form-label small">Hora</label>
+            <input
+              type="time"
+              id="exafis_hora"
+              name="exafis_hora"
+              class="form-control form-control-sm"
+              [(ngModel)]="examenFisico.exafis_hora"
+            >
+          </div>
+          
+          <div class="col-md-6">
+            <label for="pac_historiaclinica" class="form-label small">Paciente</label>
+            <input
+              type="text"
+              id="pac_historiaclinica"
+              name="pac_historiaclinica"
+              class="form-control form-control-sm"
+              [(ngModel)]="examenFisico.pac_historiaclinica"
+              readonly
+            >
+          </div>
+          
+          <!-- Sección de descripción -->
+          <div class="col-12 mt-3">
+            <h6 class="fw-bold text-primary mb-3">Descripción del Examen</h6>
+          </div>
+          
+          <div class="col-12">
+            <label for="exafis_desc" class="form-label small">Descripción del examen</label>
+            <textarea
+              id="exafis_desc"
+              name="exafis_desc"
+              class="form-control form-control-sm"
+              [(ngModel)]="examenFisico.exafis_desc"
+              rows="3"
+            ></textarea>
+          </div>
+          
+          <!-- Sección de detalle por región -->
+          <div class="col-12 mt-3">
+            <h6 class="fw-bold text-primary mb-3">Detalle por Región</h6>
+          </div>
+          
+          <div class="col-12">
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered">
+                <thead class="table-light">
+                  <tr>
+                    <th class="text-center">Región/Organo</th>
+                    <th class="text-center">Evidencia</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let detalle of examenFisico.exafis_detalle; let i = index">
+                    <td>
+                      <select
+                        class="form-select form-select-sm"
+                        [(ngModel)]="detalle.orgreg_codigo"
+                        [name]="'orgreg_codigo_' + i"
+                      >
+                        <option value="">Seleccione</option>
+                        <option *ngFor="let region of regiones" [value]="region.orgreg_codigo">
+                          {{ region.detalle }}
+                        </option>
+                      </select>
+                    </td>
+                    <td>
+                      <select
+                        class="form-select form-select-sm"
+                        [(ngModel)]="detalle.detexaf_evidencia"
+                        [name]="'detexaf_evidencia_' + i"
+                      >
+                        <option value="">Seleccione</option>
+                        <option value="SI">SI</option>
+                        <option value="NO">NO</option>
+                      </select>
+                    </td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-sm btn-danger" (click)="eliminarDetalle(i)">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" class="text-center">
+                      <button type="button" class="btn btn-sm btn-outline-primary" (click)="agregarDetalle()">
+                        <i class="fas fa-plus me-1"></i>Agregar Registro
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer bg-light d-flex justify-content-end gap-2">
+      <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelar()">
+        Cancelar
+      </button>
+      <button type="button" class="btn btn-primary btn-sm" (click)="guardar()" [disabled]="!examenForm.valid">
+        {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+      </button>
+    </div>
+  </div>
+</div>

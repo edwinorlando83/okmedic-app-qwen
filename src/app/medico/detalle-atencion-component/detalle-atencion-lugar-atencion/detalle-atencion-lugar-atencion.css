@@ -1,0 +1,78 @@
+/* src/app/detalle-atencion-lugar-atencion/detalle-atencion-lugar-atencion.component.css */
+.lugar-atencion-container {
+  /* Puedes añadir estilos específicos aquí si es necesario */
+ 
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.input-group-text {
+  background-color: #e9ecef;
+  border-color: #ced4da;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #0077b6;
+  box-shadow: 0 0 0 0.25rem rgba(0, 119, 182, 0.25);
+}
+
+.btn-outline-primary {
+  border-color: #0077b6;
+  color: #0077b6;
+}
+
+.btn-outline-primary:hover {
+  background-color: #0077b6;
+  border-color: #0077b6;
+  color: white;
+}
+
+.alert {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.alert-danger .alert-heading {
+  color: #dc3545;
+}
+
+.alert-success {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.alert-success .alert-heading {
+  color: #17a2b8;
+}
+
+.spinner-border {
+  width: 1.5rem;
+  height: 1.5rem;
+}

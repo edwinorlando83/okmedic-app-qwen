@@ -91,7 +91,7 @@
 }
 
 .tab-button.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg,  var(  --primary-color ) 0%, var(--secondary-color) 100%);
   color: white;
   font-weight: 600;
   margin: 0 8px;
@@ -108,11 +108,12 @@
 
 .content-area {
   flex: 1;
-  padding: 32px;
+ 
   min-height: 500px;
   display: flex;
-  align-items: center;
+  align-items: top;
   justify-content: center;
+  padding-top: 20px;
 }
 
 .tab-content {
@@ -185,5 +186,6 @@
   }
   .tab-button.active { margin: 0; }
   .patient-info { grid-template-columns: 1fr; }
-  .content-area { padding: 24px; }
+ 
 }
+
